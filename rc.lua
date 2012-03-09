@@ -85,20 +85,29 @@ layouts =
 layout = awful.layout.suit
 shifty.config.tags = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
-    im = { position = 2, layout = layout.tile.right, mwfact = 0.75, screen = 1 },
+    im = { position = 2, layout = layout.tile.right, mwfact = 0.75, screen = 1, spawn = "/usr/bin/pidgin" },
+    skype = { layout = layout.tile.right, screen = 1 },
     www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/firefox" },
-    video = { position = 5, layout = layout.max.fullscreen, screen = 2, nopopup = false },
-    edit = { position = 9, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
-    debug = { position = 4, screen = 1, layout = layout.tile.bottom, nopopup = false },
+    mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
     video = { position = 5, screen = 1, layout = layout.max.fullscreen, nopopup = false },
+    debug = { position = 6, screen = 1, layout = layout.tile.bottom, nopopup = false },
+    edit = { position = 9, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
+    gimp = { layout = layout.magnifier, screen = 2, spawn = "/usr/bin/gimp" },
 }
 shifty.config.apps = {
+    { match = {"Skype"}, tag = "skype" },
+    { match = {"Thunderbird"}, tag = "mail" },
+    { match = {"Gvim", "Vim", "Sublime_text"}, tag = "edit" },
     { match = {"Firefox", "Google.*", "Opera", "Chromium"}, tag = "www" },
-    { match = {"Toplevel"}, tag = "debug" },
-    { match = {"Gvim", "Vim"}, tag = "edit" },
+    { match = {"libreoffice-.*"}, tag = "libre" },
+    { match = {"Vimprobable2"}, tag = "www" },
+    { match = {"Toplevel", "Developer Tools.*", "Live HTTP headers"}, tag = "debug" },
     { match = {"xterm"}, tag = "term" },
     { match = {"Pidgin"}, tag = "im" },
     { match = {"MPlayer"}, tag = "video" },
+    { match = {"Gimp"}, tag = "gimp" },
+    { match = {"Blender"}, tag = "blndr" },
+    { match = {"Ruler", "kruler"}, float = true, sticky = true, nopopup = false, ontop = true },
 }
 shifty.config.defaults = {
     layout = layout.max,

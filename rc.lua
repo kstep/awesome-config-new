@@ -121,7 +121,7 @@ shifty.config.defaults = {
 mytextclock = awful.widget.textclock()
 mytextclock_t = awful.tooltip {
     objects = { mytextclock },
-    timer_function = function () return awful.util.pread('uptime'):gsub("\n", "") end,
+    timer_function = function () return awful.util.pread('cal -ym') end,
     timeout = 60
 }
 

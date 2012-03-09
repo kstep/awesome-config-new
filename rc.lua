@@ -247,6 +247,11 @@ end
 
 function spawner(cmd) return function () awful.util.spawn(cmd) end end
 globalkeys = awful.util.table.join(
+    awful.key({ }, "XF86Launch1", spawner(terminal .. ' -e tmux')),
+    awful.key({ }, "XF86ScreenSaver", spawner('slimlock')),
+    awful.key({ }, "XF86Sleep", spawner('sudo s2disk')),
+    awful.key({ }, "XF86Suspend", spawner('sudo s2ram')),
+
     awful.key({ modkey }, "t", stardict_translate),
 
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -284,7 +289,8 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal .. ' -e tmux') end),
+    awful.key({ }, "Pause", spawner('slimlock')),
+    awful.key({ modkey,           }, "Return", spawner(terminal .. ' -e tmux')),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 

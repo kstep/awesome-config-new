@@ -15,6 +15,12 @@ require("widgets.network")
 require("widgets.uptime")
 require("widgets.kbdd")
 
+SCREENS = screen.count()
+
+naughty.config.presets.normal.screen = SCREENS
+naughty.config.presets.low.screen = SCREENS
+naughty.config.presets.critical.screen = SCREENS
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -154,7 +160,7 @@ network_widget_ppp0 = widgets.network('ppp0', 10)
 network_widget_wlan0 = widgets.network('wlan0', 10)
 uptime_widget = widgets.uptime()
 
-for s = 1, screen.count() do
+for s = 1, SCREENS do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -181,7 +187,7 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
+    if s == SCREENS then right_layout:add(wibox.widget.systray()) end
 
     right_layout:add(battery_widget)
     right_layout:add(network_widget_ppp0)
@@ -190,7 +196,7 @@ for s = 1, screen.count() do
     right_layout:add(uptime_widget)
     right_layout:add(mytextclock)
 
-    if s == 1 then right_layout:add(widgets.kbdd()) end
+    if s == SCREENS then right_layout:add(widgets.kbdd()) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)

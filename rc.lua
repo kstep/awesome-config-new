@@ -245,12 +245,18 @@ function stardict_translate()
     end
 end
 
+function spawner(cmd) return function () awful.util.spawn(cmd) end end
 globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", stardict_translate),
 
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore),
+
+    awful.key({ }, "XF86AudioPlay", spawner("cmus-remote -u")),
+    awful.key({ }, "XF86AudioPrev", spawner("cmus-remote -r")),
+    awful.key({ }, "XF86AudioNext", spawner("cmus-remote -n")),
+    awful.key({ }, "XF86AudioStop", spawner("cmus-remote -s")),
 
     awful.key({ modkey,           }, "j",
         function ()

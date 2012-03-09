@@ -12,6 +12,8 @@ require("shifty")
 
 require("widgets.battery")
 require("widgets.network")
+require("widgets.uptime")
+require("widgets.kbdd")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -168,6 +170,7 @@ mytasklist.buttons = awful.util.table.join(
 battery_widget = widgets.battery('BAT0', 10)
 network_widget_ppp0 = widgets.network('ppp0', 10)
 network_widget_wlan0 = widgets.network('wlan0', 10)
+uptime_widget = widgets.uptime()
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -203,7 +206,10 @@ for s = 1, screen.count() do
     right_layout:add(network_widget_ppp0)
     right_layout:add(network_widget_wlan0)
 
+    right_layout:add(uptime_widget)
     right_layout:add(mytextclock)
+
+    if s == 1 then right_layout:add(widgets.kbdd()) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)

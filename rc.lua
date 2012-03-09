@@ -372,6 +372,8 @@ client.connect_signal("manage", function (c, startup)
         end
     end)
 
+    c:buttons(clientbuttons)
+
     if not startup then
         -- Set the windows at the slave,
         -- i.e. put it at the end of others instead of setting it master.

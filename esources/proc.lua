@@ -3,6 +3,7 @@ local pairs = pairs
 local setmetatable = setmetatable
 local timer = timer
 local io = io
+local table = table
 
 module('esources.proc')
 
@@ -10,6 +11,9 @@ function new(args)
     local timeout = args.timeout or 10
     local proc_path = '/proc/' .. args.path
     local fields = args.fields
+    local cols = #fields
+    local rows = args.rows or 1
+    local pattern = '^(%S+)' .. ('%s(%S+)'):rep(cols-1) .. '$'
 
     local old_value = {}
     local esrc = object()
@@ -18,12 +22,15 @@ function new(args)
     local update = function (self)
 	local value = {}
 	local dirty = false
-	local line, k, v
+	local line, data
+        local i = 0
 
 	for line in io.lines(proc_path) do
-	    -- TODO: split line by k and v
-	    if v ~= old_value[k] then dirty = true end
-	    value[k] = v
+            i = i + 1
+            if i > rows then break end
+
+            data = line:match(pattern)
+	    value
 	end
 
 	if dirty then

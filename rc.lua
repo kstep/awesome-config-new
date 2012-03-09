@@ -227,7 +227,27 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
+function stardict_translate()
+    local function translate_word(word)
+        local translation = awful.util.pread('sdcv -u "English-Russian full dictionary" -n "'..word..'"')
+        naughty.notify { title = word, text = translation, timeout = 0, width = 500, screen = SCREENS }
+    end
+
+    --local word = util.pread("xsel")
+    local word = selection()
+    if word == "" then
+        awful.prompt.run({ prompt = "Dict: " },
+        mypromptbox[mouse.screen].widget,
+        translate_word, nil,
+        awful.util.getdir("cache") .. "/history_stardict")
+    else
+        translate_word(word)
+    end
+end
+
 globalkeys = awful.util.table.join(
+    awful.key({ modkey }, "t", stardict_translate),
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore),

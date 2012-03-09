@@ -312,7 +312,7 @@ globalkeys = awful.util.table.join(
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
                   mypromptbox[mouse.screen].widget,
-                  awful.util.eval, nil,
+                  function (expr) naughty.notify { title = expr, text = awful.util.eval('return (' .. expr .. ')') } end, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end)
 )

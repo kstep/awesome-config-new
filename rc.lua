@@ -96,6 +96,7 @@ shifty.config.tags = {
     debug = { position = 6, screen = 1, layout = layout.tile.bottom, nopopup = false },
     edit = { position = 9, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
     gimp = { layout = layout.magnifier, screen = 2, spawn = "/usr/bin/gimp" },
+    vbox = { layout = layout.max, screen = 2 },
 }
 shifty.config.apps = {
     { match = {"Skype"}, tag = "skype" },
@@ -111,6 +112,7 @@ shifty.config.apps = {
     { match = {"Gimp"}, tag = "gimp" },
     { match = {"Blender"}, tag = "blndr" },
     { match = {"Ruler", "kruler"}, float = true, sticky = true, nopopup = false, ontop = true },
+    { match = {"VirtualBox"}, tag = "vbox" },
 }
 shifty.config.defaults = {
     layout = layout.max,

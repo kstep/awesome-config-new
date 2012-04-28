@@ -15,6 +15,8 @@ require("widgets.network")
 require("widgets.uptime")
 require("widgets.kbdd")
 
+require("revelation")
+
 SCREENS = screen.count()
 
 naughty.config.presets.normal.screen = SCREENS
@@ -247,6 +249,8 @@ end
 
 function spawner(cmd) return function () awful.util.spawn(cmd) end end
 globalkeys = awful.util.table.join(
+    awful.key({ modkey }, "e", revelation),
+
     awful.key({ }, "XF86Launch1", spawner(terminal .. ' -e tmux')),
     awful.key({ }, "XF86ScreenSaver", spawner('slimlock')),
     awful.key({ }, "XF86Sleep", spawner('sudo s2disk')),

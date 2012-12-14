@@ -11,6 +11,13 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
+widgets = {
+    battery = require("widgets.battery"),
+    --network = require("widgets.network"),
+    uptime = require("widgets.uptime"),
+    kbdd = require("widgets.kbdd"),
+}
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -207,6 +214,9 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+battery_widget = widgets.battery('BAT0', 10)
+uptime_widget = widgets.uptime()
+
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
@@ -235,7 +245,13 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+
+    right_layout:add(battery_widget)
+    right_layout:add(uptime_widget)
+
     right_layout:add(mytextclock)
+
+    if s == 1 then right_layout:add(widgets.kbdd()) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)

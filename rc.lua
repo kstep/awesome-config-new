@@ -88,32 +88,26 @@ end
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-function create_tag_keys(i)
+function create_tag_keys(i, tag)
     return awful.util.table.join(
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
-                        local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
-                        end
+                      awful.tag.viewonly(tag)
                   end),
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
-                      local screen = mouse.screen
-                      if tags[screen][i] then
-                          awful.tag.viewtoggle(tags[screen][i])
-                      end
+                      awful.tag.viewtoggle(tag)
                   end),
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.movetotag(tags[client.focus.screen][i])
+                      if client.focus then
+                          awful.client.movetotag(tag)
                       end
                   end),
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.toggletag(tags[client.focus.screen][i])
+                      if client.focus then
+                          awful.client.toggletag(tag)
                       end
                   end)
     )
@@ -147,7 +141,7 @@ for n, a in pairs(all_tags) do
     local p = a.position or (#tags[s] + 1)
 
     if a.position then
-        tag_keys = awful.util.table.join(tag_keys, create_tag_keys(a.position))
+        tag_keys = awful.util.table.join(tag_keys, create_tag_keys(a.position, t))
     end
 
     table.insert(tags[s], p, t)

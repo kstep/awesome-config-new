@@ -7,7 +7,7 @@ local tooltip = require('awful.tooltip')
 
 local setmetatable = setmetatable
 
-module('widgets.battery')
+local battery = { mt = {} }
 
 local event_sources = {}
 local function event_source(battery, timeout)
@@ -35,7 +35,7 @@ local status_colors = {
 }
 local default_status_color = '#E2EEEA'
 
-function new(battery, timeout)
+function battery.new(battery, timeout)
     local esrc = event_source(battery, timeout)
 
     local widget = progressbar { width = 10 }
@@ -66,4 +66,9 @@ function new(battery, timeout)
     return widget
 end
 
-setmetatable(_M, { __call = function (_, ...) return new(...) end })
+function battery.mt:__call(...)
+    return battery.new(...)
+end
+
+return setmetatable(battery, battery.mt)
+

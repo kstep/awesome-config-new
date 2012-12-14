@@ -8,12 +8,16 @@ local util = require('awful.util')
 local textbox = require('wibox.widget.textbox')
 local layout = require('wibox.layout')
 local tooltip = require('awful.tooltip')
-local fs = require('libfs')
+local fs = require('lfs')
 local os = os
 
 local setmetatable = setmetatable
 
-module('widgets.network')
+local network = { mt = {} }
+
+local function is_dir(name)
+    return fs.attributes(name).mode == 'directory'
+end
 
 local event_sources = {}
 local function event_source(interface, timeout)
@@ -24,7 +28,7 @@ local function event_source(interface, timeout)
             ['statistics/tx_bytes'] = '*n',
         }
 
-        if fs.is_dir('/sys/class/net/' .. interface .. '/wireless') then
+        if is_dir('/sys/class/net/' .. interface .. '/wireless') then
             fields['wireless/link'] = '*n'
         end
 
@@ -46,7 +50,7 @@ local state_colors = {
 }
 local default_state_color = '#ffff00'
 
-function new(interface, timeout)
+function network.new(interface, timeout)
     local widget = layout.fixed.horizontal()
     local esrc = event_source(interface, timeout)
 
@@ -112,5 +116,9 @@ function new(interface, timeout)
     return widget
 end
 
-setmetatable(_M, { __call = function (_, ...) return new(...) end })
+function network.mt:__call(...)
+    return network.new(...)
+end
+
+return setmetatable(network, network.mt)
 

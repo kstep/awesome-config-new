@@ -5,10 +5,10 @@ local bg = require('wibox.widget.background')
 
 local setmetatable = setmetatable
 
-module('widgets.kbdd')
+local kbdd = { mt = {} }
 
-local layouts = { [0] = ' En ', [1] = ' Ru ' }
-local colors = { [0] = '#0000ff', [1] = '#ff0000' }
+local layouts = { [0] = ' En ', [1] = ' Ru ', [2] = ' De ' }
+local colors = { [0] = '#0000ff', [1] = '#ff0000', [2] = '#b13e0f' }
 
 local widget = textbox()
 widget.bg = bg()
@@ -27,5 +27,9 @@ dbus.connect_signal("ru.gentoo.kbdd", function (src, layout)
 end)
 widget:update()
 
-setmetatable(_M, { __call = function (_, ...) return widget.bg end })
+function kbdd.mt:__call(...)
+    return widget.bg
+end
+
+return setmetatable(kbdd, kbdd.mt)
 

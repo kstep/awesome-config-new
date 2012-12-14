@@ -1,8 +1,8 @@
 local math = math
 
-module('widgets.util')
+local util = { mt = {} }
 
-function dhms(value)
+function util.dhms(value)
     local secs = value or 0
     local days  = math.floor(secs / 86400); secs = secs % 86400
     local hours = math.floor(secs / 3600); secs = secs % 3600
@@ -10,7 +10,7 @@ function dhms(value)
     return days, hours, mins, secs
 end
 
-function humanize(value, meta)
+function util.humanize(value, meta)
     meta = meta or {}
     local suffixes = meta.suffixes or { "b", "K", "M", "G", "T", "P", "E", "Z", "Y" }
     local scale = meta.scale or 1024
@@ -24,15 +24,17 @@ function humanize(value, meta)
     return value, suffixes[suffix]
 end
 
-function rtrim(value)
+function util.rtrim(value)
     return value:gsub('%s+$', '')
 end
 
-function ltrim(value)
+function util.ltrim(value)
     return value:gsub('^%s+', '')
 end
 
-function trim(value)
-    return rtril(ltrim(value))
+function util.trim(value)
+    return util.rtril(util.ltrim(value))
 end
+
+return util
 

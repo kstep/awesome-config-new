@@ -4,7 +4,7 @@ local timer = timer
 local io = io
 local setmetatable = setmetatable
 
-module('widgets.uptime')
+local uptime = { mt = {} }
 
 local function readfile(file, format)
     local fh = io.open(file, 'r')
@@ -15,7 +15,7 @@ local function readfile(file, format)
     end
 end
 
-function new()
+function uptime.new()
     local widget = textbox()
     widget.update = function (self)
         local uptime = readfile('/proc/uptime', '*n')
@@ -33,5 +33,9 @@ function new()
     return widget
 end
 
-setmetatable(_M, { __call = function (_, ...) return new(...) end })
+function uptime.mt:__call(...)
+    return uptime.new(...)
+end
+
+return setmetatable(uptime, uptime.mt)
 

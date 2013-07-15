@@ -112,16 +112,18 @@ end
 
 layout = awful.layout.suit
 all_tags = {
-    term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
-    im = { position = 2, layout = layout.tile.right, mwfact = 0.75, screen = 1, spawn = "/usr/bin/pidgin" },
-    skype = { layout = layout.tile.right, screen = 1 },
-    www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/firefox" },
-    mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
+    term = { position = 1, layout = layout.tile.bottom, init = true, screen = 1 },
+    skype = { position = 2, layout = layout.tile.right, screen = 2 },
+    www  = { position = 3, layout = layout.max, screen = 1, spawn = "/usr/bin/firefox" },
+    mail = { position = 4, layout = layout.max, screen = 2, spawn = "/usr/bin/thunderbird" },
     video = { position = 5, screen = 1, layout = layout.max.fullscreen, nopopup = false },
     debug = { position = 6, screen = 1, layout = layout.tile.bottom, nopopup = false },
-    edit = { position = 7, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
-    gimp = { layout = layout.magnifier, screen = 2, spawn = "/usr/bin/gimp" },
-    vbox = { layout = layout.max, screen = 2 },
+    edit = { position = 7, layout = layout.tile.bottom, screen = 1, spawn = "/usr/bin/gvim" },
+    gimp = { layout = layout.magnifier, screen = 1, spawn = "/usr/bin/gimp" },
+    vbox = { layout = layout.max, screen = 1 },
+    vnc = { layout = layout.max, screen = 1 },
+    libre = { screen = 2 },
+    droid = { },
 }
 
 tags = {}
@@ -141,7 +143,7 @@ for n, a in pairs(all_tags) do
         tag_keys = awful.util.table.join(tag_keys, create_tag_keys(a.position, t))
     end
 
-    table.insert(tags[s], p, t)
+    tags[s][p] = t
     all_tags[n] = t
 end
 awful.tag.viewonly(all_tags.term)
@@ -385,14 +387,23 @@ awful.rules.rules = {
     { rule = { class = "Skype" }, properties = { tag = all_tags.skype } },
     { rule = { class = "Thunderbird" }, properties = { tag = all_tags.mail } },
     { rule = { class = "Gvim" }, properties = { tag = all_tags.edit } },
-    { rule = { class = "XTerm" }, properties = { tag = all_tags.term } },
+    { rule = { class = "Emacs" }, properties = { tag = all_tags.edit } },
+    { rule = { class = "XTerm" }, properties = { tag = all_tags.term, opacity = 0.9 } },
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
     { rule = { class = "Gimp" }, properties = { tag = all_tags.gimp } },
     { rule = { class = "VirtualBox" }, properties = { tag = all_tags.vbox } },
+    { rule = { class = "^VBox" }, properties = { tag = all_tags.vbox } },
+    { rule = { class = "vnc" }, properties = { tag = all_tags.vnc } },
+    { rule = { class = "Blueman" }, properties = { tag = all_tags.debug } },
     { rule = { class = "Firefox" }, properties = { tag = all_tags.www } },
+    { rule = { class = "luakit" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
+    { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
+    { rule = { class = "Android Virtual Device Manager" }, properties = { tag = all_tags.droid } },
+    { rule = { class = "emulator64-x86" }, properties = { tag = all_tags.droid } },
 }
 -- }}}
 

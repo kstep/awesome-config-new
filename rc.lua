@@ -315,8 +315,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
@@ -334,7 +332,11 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "p", function() menubar.show() end),
+    awful.key({ modkey, "Shift" }, "o", function () awesome.exec("/usr/bin/xmonad") end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("ossvol -i 5") end),
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("ossvol -d 5") end),
+    awful.key({ }, "XF86AudioMute", function () awful.util.spawn("ossvol -t") end)
 )
 
 clientkeys = awful.util.table.join(

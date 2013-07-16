@@ -11,6 +11,9 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
+-- Themes define colours, icons, and wallpapers
+beautiful.init("/home/kstep/.config/awesome/theme.lua")
+
 widgets = {
     battery = require("widgets.battery"),
     --network = require("widgets.network"),
@@ -44,8 +47,6 @@ end
 -- }}}
 
 -- {{{ Variable definitions
--- Themes define colours, icons, and wallpapers
-beautiful.init("/home/kstep/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm"

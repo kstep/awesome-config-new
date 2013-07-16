@@ -2,13 +2,14 @@
 local dbus = dbus
 local textbox = require('wibox.widget.textbox')
 local bg = require('wibox.widget.background')
+local theme = require('beautiful')
 
 local setmetatable = setmetatable
 
 local kbdd = { mt = {} }
 
 local layouts = { [0] = ' En ', [1] = ' Ru ', [2] = ' De ' }
-local colors = { [0] = '#0000ff', [1] = '#ff0000', [2] = '#b13e0f' }
+local colors = { [0] = theme.colors.blue, [1] = theme.colors.red, [2] = theme.colors.violet }
 
 local widget = textbox()
 widget.bg = bg()

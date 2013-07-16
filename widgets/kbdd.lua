@@ -3,6 +3,7 @@ local dbus = dbus
 local textbox = require('wibox.widget.textbox')
 local bg = require('wibox.widget.background')
 local theme = require('beautiful')
+local util = require('awful.util')
 
 local setmetatable = setmetatable
 
@@ -18,7 +19,7 @@ widget.bg:set_widget(widget)
 
 widget.update = function (self, layout)
     self:set_text(layouts[layout] or ' ?? ')
-    self.bg:set_bg(colors[layout] or '#000000')
+    self.bg:set_bg(colors[layout] or theme.colors.base0)
 end
 
 dbus.request_name("session", "ru.gentoo.kbdd")
@@ -26,7 +27,8 @@ dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
 dbus.connect_signal("ru.gentoo.kbdd", function (src, layout)
     widget:update(layout)
 end)
-widget:update()
+--util.spawn("/usr/bin/dbus-send --dest=ru.gentoo.KbddService /ru/gentoo/KbddService ru.gentoo.kbdd.set_layout uint32:0")
+widget:update(0)
 
 function kbdd.mt:__call(...)
     return widget.bg

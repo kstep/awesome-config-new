@@ -16,7 +16,7 @@ beautiful.init("/home/kstep/.config/awesome/theme.lua")
 
 widgets = {
     battery = require("widgets.battery"),
-    --network = require("widgets.network"),
+    network = require("widgets.network"),
     uptime = require("widgets.uptime"),
     kbdd = require("widgets.kbdd"),
 }
@@ -115,12 +115,13 @@ layout = awful.layout.suit
 all_tags = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 1 },
     skype = { position = 2, layout = layout.tile.right, screen = 2 },
+    chat = { layout = layout.tile.max, screen = 2 },
     www  = { position = 3, layout = layout.max, screen = 1, spawn = "/usr/bin/firefox" },
     mail = { position = 4, layout = layout.max, screen = 2, spawn = "/usr/bin/thunderbird" },
     video = { position = 5, screen = 1, layout = layout.max.fullscreen, nopopup = false },
     debug = { position = 6, screen = 1, layout = layout.tile.bottom, nopopup = false },
     edit = { position = 7, layout = layout.tile.bottom, screen = 1, spawn = "/usr/bin/gvim" },
-    gimp = { layout = layout.magnifier, screen = 1, spawn = "/usr/bin/gimp" },
+    gimp = { layout = layout.max, screen = 1, spawn = "/usr/bin/gimp" },
     vbox = { layout = layout.max, screen = 1 },
     vnc = { layout = layout.max, screen = 1 },
     libre = { screen = 2 },
@@ -210,6 +211,7 @@ mytasklist.buttons = awful.util.table.join(
 
 battery_widget = widgets.battery('BAT0', 10)
 uptime_widget = widgets.uptime()
+network_widget = widgets.network('wlp3s0', 10)
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -242,6 +244,7 @@ for s = 1, screen.count() do
 
     right_layout:add(battery_widget)
     right_layout:add(uptime_widget)
+    right_layout:add(network_widget)
 
     right_layout:add(mytextclock)
 
@@ -335,8 +338,8 @@ globalkeys = awful.util.table.join(
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
     awful.key({ modkey, "Shift" }, "o", function () awesome.exec("/usr/bin/xmonad") end),
-    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("ossvol -i 5") end),
-    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("ossvol -d 5") end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("ossvol -i 1") end),
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("ossvol -d 1") end),
     awful.key({ }, "XF86AudioMute", function () awful.util.spawn("ossvol -t") end)
 )
 
@@ -388,6 +391,7 @@ awful.rules.rules = {
       properties = { floating = true } },
 
     { rule = { class = "Skype" }, properties = { tag = all_tags.skype } },
+    { rule = { name = "^HipChat" }, properties = { tag = all_tags.chat } },
     { rule = { class = "Thunderbird" }, properties = { tag = all_tags.mail } },
     { rule = { class = "Gvim" }, properties = { tag = all_tags.edit } },
     { rule = { class = "Emacs" }, properties = { tag = all_tags.edit } },

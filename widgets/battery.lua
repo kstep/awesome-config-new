@@ -4,6 +4,7 @@ local wutil = require('widgets.util')
 local util = require('awful.util')
 local progressbar = require('awful.widget.progressbar')
 local tooltip = require('awful.tooltip')
+local theme = require('beautiful')
 
 local setmetatable = setmetatable
 
@@ -28,12 +29,12 @@ local function event_source(battery, timeout)
 end
 
 local status_colors = {
-    Charging    = '#00FF00',
-    Discharging = '#FF0000',
-    Charged     = '#00FFFF',
-    Unknown     = '#00FFFF',
+    Charging    = theme.colors.green,
+    Discharging = theme.colors.red,
+    Charged     = theme.colors.blue,
+    Unknown     = theme.colors.orange,
 }
-local default_status_color = '#E2EEEA'
+local default_status_color = theme.colors.orange
 
 function battery.new(battery, timeout)
     local esrc = event_source(battery, timeout)

@@ -8,16 +8,12 @@ local util = require('awful.util')
 local textbox = require('wibox.widget.textbox')
 local layout = require('wibox.layout')
 local tooltip = require('awful.tooltip')
-local fs = require('lfs')
+local theme = require('beautiful')
 local os = os
 
 local setmetatable = setmetatable
 
 local network = { mt = {} }
-
-local function is_dir(name)
-    return fs.attributes(name).mode == 'directory'
-end
 
 local event_sources = {}
 local function event_source(interface, timeout)
@@ -28,16 +24,14 @@ local function event_source(interface, timeout)
             ['statistics/tx_bytes'] = '*n',
         }
 
-        if is_dir('/sys/class/net/' .. interface .. '/wireless') then
-            fields['wireless/link'] = '*n'
-        end
+        --fields['wireless/link'] = '*n'
 
         esrc = sys {
             timeout = timeout,
             path = 'class/net/' .. interface,
             fields = fields
         }
-        esrc.wireless = not not fields['wireless/link']
+        --esrc.wireless = not not fields['wireless/link']
 
         event_sources[interface] = esrc
     end
@@ -45,10 +39,10 @@ local function event_source(interface, timeout)
 end
 
 local state_colors = {
-    up   = '#00ff00',
-    down = '#ff0000',
+    up   = theme.colors.green,
+    down = theme.colors.red,
 }
-local default_state_color = '#ffff00'
+local default_state_color = theme.colors.orange
 
 function network.new(interface, timeout)
     local widget = layout.fixed.horizontal()
@@ -63,7 +57,7 @@ function network.new(interface, timeout)
     if esrc.wireless then
        pbar = progressbar { width = 8 }
        pbar:set_max_value(70)
-       pbar:set_color("linear:0,0:20,20:0,#ff0000:1,#330000")
+       pbar:set_color("linear:0,0:20,20:0," .. theme.colors.red .. ":1," .. theme.colors.green)
        widget:add(pbar)
     end
 

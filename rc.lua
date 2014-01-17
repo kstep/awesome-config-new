@@ -268,6 +268,42 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+local volume_notification
+function notify_volume(amixer_output)
+    local vol, pvol, dbvol, muted = amixer_output:match("Mono: Playback (%d+) %[(%d+)%%%] %[([%d.+-]+)dB%] %[(%a+)%]")
+    if not vol then return end
+
+    muted = muted == "off"
+    vol = tonumber(vol)
+    pvol = tonumber(pvol)
+    dbvol = tonumber(dbvol)
+
+    local volicon = "medium"
+    local voltext = pvol .. "%"
+    if muted or vol == 0 then
+        volicon = "muted"
+    elseif pvol < 20 then
+        volicon = "low"
+    elseif pvol > 80 then
+        volicon = "high"
+    end
+
+    if volume_notification then
+        naughty.destroy(volume_notification)
+    end
+
+    local barsize = math.floor(pvol / 10)
+    local bar = ("■"):rep(barsize) .. ("□"):rep(10 - barsize)
+
+    volume_notification = naughty.notify {
+        title = "Volume " .. (muted and "muted" or (pvol .. "%")),
+        text = bar,
+        timeout = 5,
+        icon = "/usr/share/icons/oxygen/32x32/status/audio-volume-" .. volicon .. ".png",
+        screen = screen.count(),
+    }
+end
+
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ }, "Pause", function ()

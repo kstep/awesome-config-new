@@ -114,7 +114,7 @@ end
 layout = awful.layout.suit
 all_tags = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 1 },
-    skype = { position = 2, layout = layout.tile.right, screen = 2 },
+    skype = { position = 2, layout = layout.tile, screen = 2, mwfact = 0.7 },
     chat = { layout = layout.tile.max, screen = 2 },
     www  = { position = 3, layout = layout.max, screen = 1, spawn = "/usr/bin/firefox" },
     mail = { position = 4, layout = layout.max, screen = 2, spawn = "/usr/bin/thunderbird" },

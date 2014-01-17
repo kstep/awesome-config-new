@@ -270,6 +270,9 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ }, "Pause", function ()
+        awful.util.spawn_with_shell("xrandrconf.sh same-as; sleep 1; slimlock; xrandrconf.sh right-of")
+    end),
     awful.key({ modkey, }, "Left", function ()
         local tag
         repeat

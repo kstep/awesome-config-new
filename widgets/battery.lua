@@ -46,7 +46,7 @@ function battery.new(battery, timeout)
 
     widget.esource = esrc
     widget.update = function (esrc, value)
-        energy = (value.charge_now or value.energy_now) * 100 / (value.charge_full or value.energy_full)
+        energy = (value.charge_now or value.energy_now or 1) * 100 / (value.charge_full or value.energy_full or 1)
         widget:set_color(status_colors[value.status] or default_status_color)
         widget:set_value(energy)
     end

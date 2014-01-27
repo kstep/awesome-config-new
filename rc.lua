@@ -113,18 +113,18 @@ end
 
 layout = awful.layout.suit
 all_tags = {
-    term = { position = 1, layout = layout.tile.bottom, init = true, screen = 1 },
-    skype = { position = 2, layout = layout.tile, screen = 2, mwfact = 0.7 },
-    chat = { layout = layout.tile.max, screen = 2 },
-    www  = { position = 3, layout = layout.max, screen = 1, spawn = "/usr/bin/firefox" },
-    mail = { position = 4, layout = layout.max, screen = 2, spawn = "/usr/bin/thunderbird" },
-    video = { position = 5, screen = 1, layout = layout.max.fullscreen, nopopup = false },
-    debug = { position = 6, screen = 1, layout = layout.tile.bottom, nopopup = false },
-    edit = { position = 7, layout = layout.tile.bottom, screen = 1, spawn = "/usr/bin/gvim" },
-    gimp = { layout = layout.max, screen = 1, spawn = "/usr/bin/gimp" },
-    vbox = { layout = layout.max, screen = 1 },
-    vnc = { layout = layout.max, screen = 1 },
-    libre = { screen = 2 },
+    term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
+    skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
+    chat = { layout = layout.tile.max, screen = 1 },
+    www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/firefox" },
+    mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
+    video = { position = 5, screen = 2, layout = layout.max.fullscreen, nopopup = false },
+    debug = { position = 6, screen = 2, layout = layout.tile.bottom, nopopup = false },
+    edit = { position = 7, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
+    gimp = { layout = layout.max, screen = 2, spawn = "/usr/bin/gimp" },
+    vbox = { layout = layout.max, screen = 2 },
+    vnc = { layout = layout.max, screen = 2 },
+    libre = { screen = 1 },
     droid = { },
 }
 
@@ -209,9 +209,9 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
-battery_widget = widgets.battery('BAT0', 10)
+battery_widget = widgets.battery('BAT1', 10)
 uptime_widget = widgets.uptime()
-network_widget = widgets.network('wlp3s0', 10)
+network_widget = widgets.network('wlp8s0', 10)
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -268,19 +268,38 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
-local volume_notification
-function notify_volume(amixer_output)
-    local vol, pvol, dbvol, muted = amixer_output:match("Mono: Playback (%d+) %[(%d+)%%%] %[([%d.+-]+)dB%] %[(%a+)%]")
-    if not vol then return end
+function parse_alsa_mixer_output(output, toggle)
+    local vol, pvol, dbvol, muted = output:match("(%d+) %[(%d+)%%%] %[([%d.+-]+)dB%] %[(%a+)%]")
+    return tonumber(pvol), muted == "off"
+end
 
-    muted = muted == "off"
-    vol = tonumber(vol)
-    pvol = tonumber(pvol)
+function parse_oss_mixer_output(output, toggle)
+    local dbvol = output:match("(%d+.%d+)")
     dbvol = tonumber(dbvol)
+    return dbvol * 100.0 / 25.0, toggle and (dbvol == 0.0)
+end
+
+local parse_mixer_output, raise_volume, lower_volume, toggle_volume
+if type(awful.util.spawn("amixer")) == "number" then -- alsa mixer
+    parse_mixer_output = parse_alsa_mixer_output
+    raise_volume = "amixer set Master playback 5+"
+    lower_volume = "amixer set Master playback 5-"
+    toggle_volume = "amixer set Master playback toggle"
+else -- OSS mixer
+    parse_mixer_output = parse_oss_mixer_output
+    raise_volume = "ossmix -i 1"
+    lower_volume = "ossmix -d 1"
+    toggle_volume = "ossmix -t"
+end
+
+local volume_notification
+function notify_volume(mixer_output, toggle)
+    local pvol, muted = parse_mixer_output(mixer_output, toggle)
+    if not pvol then return end
 
     local volicon = "medium"
     local voltext = pvol .. "%"
-    if muted or vol == 0 then
+    if muted or pvol == 0 then
         volicon = "muted"
     elseif pvol < 20 then
         volicon = "low"
@@ -293,7 +312,7 @@ function notify_volume(amixer_output)
     end
 
     local barsize = math.floor(pvol / 10)
-    local bar = ("■"):rep(barsize) .. ("□"):rep(10 - barsize)
+    local bar = ("▣"):rep(barsize) .. ("□"):rep(10 - barsize)
 
     volume_notification = naughty.notify {
         title = "Volume " .. (muted and "muted" or (pvol .. "%")),
@@ -376,10 +395,9 @@ globalkeys = awful.util.table.join(
               end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
-    awful.key({ modkey, "Shift" }, "o", function () awesome.exec("/usr/bin/xmonad") end),
-    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("ossvol -i 1") end),
-    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("ossvol -d 1") end),
-    awful.key({ }, "XF86AudioMute", function () awful.util.spawn("ossvol -t") end)
+    awful.key({ }, "XF86AudioRaiseVolume", function () notify_volume(awful.util.pread(raise_volume)) end),
+    awful.key({ }, "XF86AudioLowerVolume", function () notify_volume(awful.util.pread(lower_volume)) end),
+    awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end)
 )
 
 clientkeys = awful.util.table.join(

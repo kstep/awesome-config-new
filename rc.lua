@@ -282,16 +282,16 @@ function parse_oss_mixer_output(output, toggle)
 end
 
 local parse_mixer_output, raise_volume, lower_volume, toggle_volume
-if type(awful.util.spawn("amixer")) == "number" then -- alsa mixer
+if type(awful.util.spawn("ossvol")) == "number" then -- OSS mixer
+    parse_mixer_output = parse_oss_mixer_output
+    raise_volume = "ossvol -i 1"
+    lower_volume = "ossvol -d 1"
+    toggle_volume = "ossvol -t"
+else -- ALSA mixer
     parse_mixer_output = parse_alsa_mixer_output
     raise_volume = "amixer set Master playback 5+"
     lower_volume = "amixer set Master playback 5-"
     toggle_volume = "amixer set Master playback toggle"
-else -- OSS mixer
-    parse_mixer_output = parse_oss_mixer_output
-    raise_volume = "ossmix -i 1"
-    lower_volume = "ossmix -d 1"
-    toggle_volume = "ossmix -t"
 end
 
 local volume_notification

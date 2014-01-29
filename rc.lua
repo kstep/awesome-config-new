@@ -210,9 +210,10 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
-battery_widget = widgets.battery('BAT1', 10)
+local widgets_config = require("widgets.config")
+battery_widget = widgets.battery(widgets_config.battery, 10)
 uptime_widget = widgets.uptime()
-network_widget = widgets.network('wlp8s0', 10)
+network_widget = widgets.network(widgets_config.wifi, 10)
 
 SCREENS = screen.count()
 for s = 1, SCREENS do

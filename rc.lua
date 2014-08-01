@@ -112,7 +112,7 @@ function create_tag_keys(i, tag)
 end
 
 layout = awful.layout.suit
-all_tags = {
+tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
     chat = { layout = layout.tile.max, screen = 1 },
@@ -129,12 +129,13 @@ all_tags = {
 }
 
 tags = {}
+all_tags = {}
 tag_keys = {}
 for s = 1, screen.count() do
     tags[s] = {}
 end
 
-for n, a in pairs(all_tags) do
+for n, a in pairs(tags_desc) do
     local s = math.min(a.screen or 1, #tags)
     a.screen = s
 

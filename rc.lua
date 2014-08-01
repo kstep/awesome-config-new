@@ -214,7 +214,8 @@ battery_widget = widgets.battery('BAT1', 10)
 uptime_widget = widgets.uptime()
 network_widget = widgets.network('wlp8s0', 10)
 
-for s = 1, screen.count() do
+SCREENS = screen.count()
+for s = 1, SCREENS do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -241,7 +242,7 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
+    if s == SCREENS then right_layout:add(wibox.widget.systray()) end
 
     right_layout:add(battery_widget)
     right_layout:add(uptime_widget)
@@ -249,7 +250,7 @@ for s = 1, screen.count() do
 
     right_layout:add(mytextclock)
 
-    if s == 1 then right_layout:add(widgets.kbdd()) end
+    if s == SCREENS then right_layout:add(widgets.kbdd()) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)

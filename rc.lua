@@ -115,7 +115,7 @@ layout = awful.layout.suit
 tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
-    chat = { layout = layout.tile.max, screen = 1 },
+    chat = { layout = layout.tile, screen = 1 },
     www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/firefox" },
     mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
     video = { position = 5, screen = 2, layout = layout.max.fullscreen, nopopup = false },
@@ -125,7 +125,7 @@ tags_desc = {
     vbox = { layout = layout.max, screen = 2 },
     vnc = { layout = layout.max, screen = 2 },
     libre = { screen = 1 },
-    droid = { },
+    droid = { screen = 2 },
 }
 
 tags = {}
@@ -441,34 +441,20 @@ awful.rules.rules = {
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
-    { rule = { class = "pinentry" },
-      properties = { floating = true } },
-    { rule = { class = "gimp" },
-      properties = { floating = true } },
 
+    { rule = { role = "popup" }, properties = { y = 0, x = 0 } },
+
+    { rule = { class = "MPlayer" }, properties = { floating = true } },
+    { rule = { class = "gimp" }, properties = { floating = true } },
     { rule = { class = "Skype" }, properties = { tag = all_tags.skype } },
-    { rule = { name = "^HipChat" }, properties = { tag = all_tags.chat } },
-    { rule = { class = "Thunderbird" }, properties = { tag = all_tags.mail } },
     { rule = { class = "Gvim" }, properties = { tag = all_tags.edit } },
-    { rule = { class = "Emacs" }, properties = { tag = all_tags.edit } },
     { rule = { class = "XTerm" }, properties = { tag = all_tags.term, opacity = 0.9 } },
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
-    { rule = { class = "Gimp" }, properties = { tag = all_tags.gimp } },
-    { rule = { class = "VirtualBox" }, properties = { tag = all_tags.vbox } },
-    { rule = { class = "^VBox" }, properties = { tag = all_tags.vbox } },
-    { rule = { class = "vnc" }, properties = { tag = all_tags.vnc } },
-    { rule = { class = "Blueman" }, properties = { tag = all_tags.debug } },
-    { rule = { class = "Firefox" }, properties = { tag = all_tags.www } },
-    { rule = { class = "luakit" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
-    { rule = { class = "Android Virtual Device Manager" }, properties = { tag = all_tags.droid } },
-    { rule = { class = "emulator64-x86" }, properties = { tag = all_tags.droid } },
+    { rule = { class = "Google-chrome-unstable" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Google-chrome" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
+
 }
 -- }}}
 

@@ -21,6 +21,10 @@ widgets = {
     kbdd = require("widgets.kbdd"),
 }
 
+SCREENS = screen.count()
+
+naughty.config.defaults.screen = SCREENS
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -215,7 +219,6 @@ battery_widget = widgets.battery(widgets_config.battery, 10)
 uptime_widget = widgets.uptime()
 network_widget = widgets.network(widgets_config.wifi, 10)
 
-SCREENS = screen.count()
 for s = 1, SCREENS do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()

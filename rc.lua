@@ -450,6 +450,9 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
 
+    { rule = { instance = "chromium_app_list" }, properties = { floating = true } },
+    { rule = { instance = "chrome_app_list" }, properties = { floating = true } },
+
     { rule = { role = "popup" }, properties = { y = 0, x = 0 } },
 
     { rule = { class = "MPlayer" }, properties = { floating = true } },

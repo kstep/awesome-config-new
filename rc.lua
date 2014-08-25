@@ -462,6 +462,8 @@ awful.rules.rules = {
     { rule = { class = "XTerm" }, properties = { tag = all_tags.term, opacity = 0.9 } },
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
+    { rule = { class = "Dwb" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Firefox" }, properties = { tag = all_tags.www } },
     { rule = { class = "Google-chrome-unstable" }, properties = { tag = all_tags.www } },
     { rule = { class = "Google-chrome" }, properties = { tag = all_tags.www } },
     { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },

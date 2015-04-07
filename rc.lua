@@ -469,11 +469,14 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
     { rule = { instance = "Browser" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Vimb" }, properties = { tag = all_tags.www } },
     { rule = { class = "Dwb" }, properties = { tag = all_tags.www } },
     { rule = { class = "Firefox" }, properties = { tag = all_tags.www } },
     { rule = { class = "Google-chrome-unstable" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Google-chrome-beta" }, properties = { tag = all_tags.www } },
     { rule = { class = "Google-chrome" }, properties = { tag = all_tags.www } },
     { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
+    { rule = { class = "Opera" }, properties = { tag = all_tags.www } },
 
 }
 -- }}}

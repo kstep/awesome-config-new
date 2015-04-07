@@ -131,6 +131,7 @@ tags_desc = {
     vnc = { layout = layout.max, screen = 2 },
     libre = { screen = 1 },
     droid = { screen = 2 },
+    karma = { screen = 2, layout = layout.fair },
 }
 
 tags = {}
@@ -477,6 +478,7 @@ awful.rules.rules = {
     { rule = { class = "Google-chrome" }, properties = { tag = all_tags.www } },
     { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
     { rule = { class = "Opera" }, properties = { tag = all_tags.www } },
+    { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },
 
 }
 -- }}}

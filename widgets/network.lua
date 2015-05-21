@@ -49,7 +49,7 @@ function network.new(interface, timeout)
     local esrc = event_source(interface, timeout)
 
     local label = textbox()
-    local pattern = '<span color="%s"> ' .. interface .. ' (%d %s/s) </span>'
+    local pattern = '<span color="%s"> ' .. interface .. ' (%.1f %s/s) </span>'
     label:set_markup(pattern:format(default_state_color, 0, 'b'))
     widget:add(label)
 

@@ -287,6 +287,10 @@ function parse_oss_mixer_output(output, toggle)
     return dbvol * 100.0 / 25.0, toggle and (dbvol == 0.0)
 end
 
+function parse_xbacklight_output(output)
+    return tonumber(output:match("(%d+)"))
+end
+
 local parse_mixer_output, raise_volume, lower_volume, toggle_volume
 if type(awful.util.spawn("ossvol")) == "number" then -- OSS mixer
     parse_mixer_output = parse_oss_mixer_output
@@ -304,13 +308,30 @@ reset_backlight = "echo 0 | sudo tee '/sys/class/backlight/intel_backlight/bl_po
 lower_brightness = reset_backlight .. "; xbacklight -dec 10 -steps 5 -time 250"
 raise_brightness = reset_backlight .. "; xbacklight -inc 10 -steps 5 -time 250"
 
-local volume_notification
+local level_notification
+function show_level_notification(title, percent, icon, muted)
+    local barsize = math.floor(percent / 10)
+    local bar = ("▣"):rep(barsize) .. ("□"):rep(10 - barsize)
+
+    if level_notification then
+        naughty.destroy(level_notification)
+    end
+
+    level_notification = naughty.notify {
+        title = title .. (muted and "muted" or (percent .. "%")),
+        text = bar,
+        timeout = 5,
+        --icon = "/usr/share/icons/oxygen/32x32/status/audio-volume-" .. volicon .. ".png",
+        icon = "/usr/share/icons/oxygen/32x32/" .. icon .. ".png",
+        screen = 2 --screen.count(),
+    }
+end
+
 function notify_volume(mixer_output, toggle)
     local pvol, muted = parse_mixer_output(mixer_output, toggle)
     if not pvol then return end
 
     local volicon = "medium"
-    local voltext = pvol .. "%"
     if muted or pvol == 0 then
         volicon = "muted"
     elseif pvol < 20 then
@@ -319,20 +340,12 @@ function notify_volume(mixer_output, toggle)
         volicon = "high"
     end
 
-    if volume_notification then
-        naughty.destroy(volume_notification)
-    end
+    show_level_notification("Volume ", pvol, "status/audio-volume-" .. volicon, muted)
+end
 
-    local barsize = math.floor(pvol / 10)
-    local bar = ("▣"):rep(barsize) .. ("□"):rep(10 - barsize)
-
-    volume_notification = naughty.notify {
-        title = "Volume " .. (muted and "muted" or (pvol .. "%")),
-        text = bar,
-        timeout = 5,
-        icon = "/usr/share/icons/oxygen/32x32/status/audio-volume-" .. volicon .. ".png",
-        screen = screen.count(),
-    }
+function notify_brightness(output)
+    local brightness = parse_xbacklight_output(output)
+    show_level_notification("Brightness ", brightness, "devices/video-display")
 end
 
 -- {{{ Key bindings
@@ -414,8 +427,8 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioLowerVolume", function () notify_volume(awful.util.pread(lower_volume)) end),
     awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end),
     awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]]) end),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness) end),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness) end)
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end)
 )
 
 clientkeys = awful.util.table.join(

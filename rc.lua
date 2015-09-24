@@ -300,6 +300,10 @@ else -- ALSA mixer
     toggle_volume = "amixer set Master playback toggle"
 end
 
+reset_backlight = "echo 0 | sudo tee '/sys/class/backlight/intel_backlight/bl_power'"
+lower_brightness = reset_backlight .. "; xbacklight -dec 10 -steps 5 -time 250"
+raise_brightness = reset_backlight .. "; xbacklight -inc 10 -steps 5 -time 250"
+
 local volume_notification
 function notify_volume(mixer_output, toggle)
     local pvol, muted = parse_mixer_output(mixer_output, toggle)
@@ -409,7 +413,9 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function () notify_volume(awful.util.pread(raise_volume)) end),
     awful.key({ }, "XF86AudioLowerVolume", function () notify_volume(awful.util.pread(lower_volume)) end),
     awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end),
-    awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]]) end)
+    awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]]) end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness) end)
 )
 
 clientkeys = awful.util.table.join(

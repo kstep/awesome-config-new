@@ -120,7 +120,7 @@ tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
     chat = { layout = layout.tile, screen = 1 },
-    www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/firefox" },
+    www  = { position = 3, layout = layout.max, screen = 2, spawn = "/usr/bin/google-chrome-beta" },
     java = { layout = layout.max, screen = 2 },
     mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
     video = { position = 5, screen = 2, layout = layout.max.fullscreen, nopopup = false },

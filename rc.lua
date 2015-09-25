@@ -300,9 +300,9 @@ if type(awful.util.spawn("ossvol")) == "number" then -- OSS mixer
     toggle_volume = "ossvol -t"
 else -- ALSA mixer
     parse_mixer_output = parse_alsa_mixer_output
-    raise_volume = "amixer set Master playback 5+"
-    lower_volume = "amixer set Master playback 5-"
-    toggle_volume = "amixer set Master playback toggle"
+    raise_volume = "amixer -c " .. widgets_config.alsa_card .. " set Master playback 5+"
+    lower_volume = "amixer -c " .. widgets_config.alsa_card .. " set Master playback 5-"
+    toggle_volume = "amixer -c " .. widgets_config.alsa_card .. " set Master playback toggle"
 end
 
 reset_backlight = "echo 0 | sudo tee '/sys/class/backlight/intel_backlight/bl_power'"

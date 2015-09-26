@@ -115,24 +115,27 @@ function create_tag_keys(i, tag)
     )
 end
 
+function scr(n)
+    return math.min(n, SCREENS)
+end
 layout = awful.layout.suit
 tags_desc = {
-    term = { position = 1, layout = layout.tile.bottom, init = true, screen = 2 },
+    term = { position = 1, layout = layout.tile.bottom, init = true, screen = scr(2) },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
     chat = { layout = layout.tile, screen = 1 },
-    www  = { position = 3, layout = layout.max, screen = 3, spawn = "/usr/bin/google-chrome-beta" },
-    java = { layout = layout.max, screen = 2 },
+    www  = { position = 3, layout = layout.max, screen = scr(3), spawn = "/usr/bin/google-chrome-beta" },
+    java = { layout = layout.max, screen = scr(2) },
     mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
-    video = { position = 5, screen = 2, layout = layout.max.fullscreen, nopopup = false },
-    debug = { position = 6, screen = 3, layout = layout.tile.bottom, nopopup = false },
-    edit = { position = 7, layout = layout.tile.bottom, screen = 2, spawn = "/usr/bin/gvim" },
-    gimp = { layout = layout.max, screen = 2, spawn = "/usr/bin/gimp" },
-    vbox = { layout = layout.max, screen = 3 },
-    vnc = { layout = layout.max, screen = 3 },
-    util = { position = 8, layout = layout.tile.bottom, screen = 3, init = true },
+    video = { position = 5, screen = scr(2), layout = layout.max.fullscreen, nopopup = false },
+    debug = { position = 6, screen = scr(3), layout = layout.tile.bottom, nopopup = false },
+    edit = { position = 7, layout = layout.tile.bottom, screen = scr(2), spawn = "/usr/bin/gvim" },
+    gimp = { layout = layout.max, screen = scr(2), spawn = "/usr/bin/gimp" },
+    vbox = { layout = layout.max, screen = scr(3) },
+    vnc = { layout = layout.max, screen = scr(3) },
+    util = { position = 8, layout = layout.tile.bottom, screen = scr(3), init = true },
     libre = { screen = 1 },
-    droid = { screen = 3 },
-    karma = { screen = 2, layout = layout.fair },
+    droid = { screen = scr(3) },
+    karma = { screen = scr(2), layout = layout.fair },
 }
 
 tags = {}

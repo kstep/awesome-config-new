@@ -22,6 +22,9 @@ widgets = {
 }
 
 SCREENS = screen.count()
+function scr(n)
+    return math.min(n, SCREENS)
+end
 
 naughty.config.defaults.screen = SCREENS
 
@@ -115,9 +118,6 @@ function create_tag_keys(i, tag)
     )
 end
 
-function scr(n)
-    return math.min(n, SCREENS)
-end
 layout = awful.layout.suit
 tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, init = true, screen = scr(2) },
@@ -327,7 +327,7 @@ function show_level_notification(title, percent, icon, muted)
         timeout = 5,
         --icon = "/usr/share/icons/oxygen/32x32/status/audio-volume-" .. volicon .. ".png",
         icon = "/usr/share/icons/oxygen/32x32/" .. icon .. ".png",
-        screen = 2 --screen.count(),
+        screen = scr(2) --screen.count(),
     }
 end
 

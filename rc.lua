@@ -98,6 +98,7 @@ function create_tag_keys(i, tag)
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
                       awful.tag.viewonly(tag)
+                      awful.screen.focus(awful.tag.getscreen(tag))
                   end),
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()

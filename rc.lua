@@ -222,7 +222,10 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 local widgets_config = require("widgets.config")
-battery_widget = widgets.battery(widgets_config.battery, 10)
+battery_widgets = {}
+for i, battery in ipairs(widgets_config.batteries) do
+    battery_widgets[i] = widgets.battery(battery, 10)
+end
 uptime_widget = widgets.uptime()
 network_widget = widgets.network(widgets_config.wifi, 10)
 
@@ -255,7 +258,9 @@ for s = 1, SCREENS do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == SCREENS then right_layout:add(wibox.widget.systray()) end
 
-    right_layout:add(battery_widget)
+    for _, battery_widget in ipairs(battery_widgets) do
+        right_layout:add(battery_widget)
+    end
     right_layout:add(uptime_widget)
     right_layout:add(network_widget)
 

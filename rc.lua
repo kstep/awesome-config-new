@@ -509,7 +509,7 @@ awful.rules.rules = {
     { rule = { class = "google-chrome-unstable" }, properties = { tag = all_tags.www } },
     { rule = { class = "google-chrome-beta" }, properties = { tag = all_tags.www } },
     { rule = { class = "google-chrome" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Chromium" }, properties = { tag = all_tags.www } },
+    { rule = { class = "chromium" }, properties = { tag = all_tags.www } },
     { rule = { class = "Opera" }, properties = { tag = all_tags.www } },
     { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },
 

@@ -582,4 +582,5 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-awful.util.spawn("/usr/bin/systemctl --user start wm.target")
+--awful.util.spawn("/usr/bin/systemctl --user import-environment DISPLAY")
+--awful.util.spawn("/usr/bin/systemctl --user start wm.target")

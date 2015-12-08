@@ -121,19 +121,20 @@ end
 
 layout = awful.layout.suit
 tags_desc = {
-    term = { position = 1, layout = layout.tile.bottom, init = true, screen = scr(2) },
+    term = { position = 1, layout = layout.tile.bottom, screen = scr(2) },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
+    www  = { position = 3, layout = layout.max, screen = scr(3) },
+    mail = { position = 4, layout = layout.max, screen = 1 },
+    video = { position = 5, screen = scr(2), layout = layout.max.fullscreen },
+    debug = { position = 6, screen = scr(3), layout = layout.tile.bottom },
+    edit = { position = 7, layout = layout.tile.bottom, screen = scr(2) },
+    util = { position = 8, layout = layout.tile.bottom, screen = scr(3) },
+
     chat = { layout = layout.tile, screen = 1 },
-    www  = { position = 3, layout = layout.max, screen = scr(3), spawn = "/usr/bin/google-chrome-beta" },
     java = { layout = layout.max, screen = scr(2) },
-    mail = { position = 4, layout = layout.max, screen = 1, spawn = "/usr/bin/thunderbird" },
-    video = { position = 5, screen = scr(2), layout = layout.max.fullscreen, nopopup = false },
-    debug = { position = 6, screen = scr(3), layout = layout.tile.bottom, nopopup = false },
-    edit = { position = 7, layout = layout.tile.bottom, screen = scr(2), spawn = "/usr/bin/gvim" },
-    gimp = { layout = layout.max, screen = scr(2), spawn = "/usr/bin/gimp" },
+    gimp = { layout = layout.max, screen = scr(2) },
     vbox = { layout = layout.max, screen = scr(3) },
     vnc = { layout = layout.max, screen = scr(3) },
-    util = { position = 8, layout = layout.tile.bottom, screen = scr(3), init = true },
     libre = { screen = 1 },
     droid = { screen = scr(3) },
     karma = { screen = scr(2), layout = layout.fair },
@@ -147,11 +148,13 @@ for s = 1, screen.count() do
 end
 
 for n, a in pairs(tags_desc) do
-    local s = math.min(a.screen or 1, #tags)
+    local s = scr(a.screen or 1)
     a.screen = s
 
-    local t = awful.tag.add(n, a)
     local p = a.position or (#tags[s] + 1)
+    a.index = p
+
+    local t = awful.tag.add(n, a)
 
     if a.position then
         tag_keys = awful.util.table.join(tag_keys, create_tag_keys(a.position, t))
@@ -160,7 +163,6 @@ for n, a in pairs(tags_desc) do
     tags[s][p] = t
     all_tags[n] = t
 end
-awful.tag.viewonly(all_tags.term)
 
 -- }}}
 
@@ -477,6 +479,10 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
+function focus_if_separate_screen(c)
+    return c.screen ~= 1
+end
+
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -487,31 +493,30 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
 
-    { rule = { instance = "chromium_app_list" }, properties = { floating = true } },
-    { rule = { instance = "chrome_app_list" }, properties = { floating = true } },
+    { rule_any = { instance = {"chromium_app_list", "chrome_app_list"} }, properties = { floating = true } },
 
     { rule = { role = "popup" }, properties = { y = 0, x = 0 } },
 
-    { rule = { class = "SWT" }, properties = { tag = all_tags.java } },
-    { rule = { class = "Eclipse" }, properties = { tag = all_tags.java } },
+    { rule_any = { class = {"SWT", "Eclipse"} }, properties = { tag = all_tags.java } },
+
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "gimp" }, properties = { floating = true } },
-    { rule = { class = "Skype" }, properties = { tag = all_tags.skype } },
-    { rule = { class = "Atom Shell" }, properties = { tag = all_tags.edit } },
-    { rule = { class = "Gvim" }, properties = { tag = all_tags.edit } },
-    { rule = { class = "XTerm" }, properties = { tag = all_tags.term, opacity = 0.9 } },
-    { rule = { class = "st-256color" }, properties = { tag = all_tags.term, opacity = 0.9 } },
+
+    { rule = { class = "Skype" }, properties = { tag = all_tags.skype, focus = focus_if_separate_screen, switchtotag = focus_if_separate_screen(tags_desc.skype) } },
+
+    { rule_any = { class = {"Gvim", "Atom Shell"} }, properties = { tag = all_tags.edit } },
+
+    { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.9, focus = true, switchtotag = true } },
+
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
+
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
-    { rule = { instance = "Browser" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Vimb" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Dwb" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Firefox" }, properties = { tag = all_tags.www } },
-    { rule = { class = "google-chrome-unstable" }, properties = { tag = all_tags.www } },
-    { rule = { class = "google-chrome-beta" }, properties = { tag = all_tags.www } },
-    { rule = { class = "google-chrome" }, properties = { tag = all_tags.www } },
-    { rule = { class = "chromium" }, properties = { tag = all_tags.www } },
-    { rule = { class = "Opera" }, properties = { tag = all_tags.www } },
+
+    { rule_any = { class = {
+        "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",
+        "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
+      properties = { tag = all_tags.www, focus = focus_if_separate_screen, switchtotag = focus_if_separate_screen(tags_desc.www) } },
+
     { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },
 
 }

@@ -479,10 +479,6 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
-function focus_if_separate_screen(c)
-    return c.screen ~= 1
-end
-
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -502,7 +498,7 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "gimp" }, properties = { floating = true } },
 
-    { rule = { class = "Skype" }, properties = { tag = all_tags.skype, focus = focus_if_separate_screen, switchtotag = focus_if_separate_screen(tags_desc.skype) } },
+    { rule = { class = "Skype" }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
 
     { rule_any = { class = {"Gvim", "Atom Shell"} }, properties = { tag = all_tags.edit } },
 
@@ -515,7 +511,7 @@ awful.rules.rules = {
     { rule_any = { class = {
         "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",
         "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
-      properties = { tag = all_tags.www, focus = focus_if_separate_screen, switchtotag = focus_if_separate_screen(tags_desc.www) } },
+      properties = { tag = all_tags.www, focus = true, switchtotag = true } },
 
     { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },
 

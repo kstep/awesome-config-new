@@ -92,7 +92,7 @@ function network.new(interface, timeout)
         end
     end
 
-    local tooltip_cmd = 'ifconfig ' .. interface
+    local tooltip_cmd = 'ip addr show dev ' .. interface
     if pbar then tooltip_cmd = tooltip_cmd .. ' && iwconfig ' .. interface end
     widget.tooltip = tooltip {
         objects = { widget },

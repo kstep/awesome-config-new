@@ -479,6 +479,11 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
+function screen_right_edge(num)
+    local s = screen[num]
+    return s.workarea.x + s.workarea.width
+end
+
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -512,6 +517,12 @@ awful.rules.rules = {
         "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",
         "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
       properties = { tag = all_tags.www, focus = true, switchtotag = true } },
+
+    { rule = { class = "ViberPC" }, properties = { tag = all_tags.www, focus = false } },
+    { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
+        x = screen_right_edge(scr(2)) - 350,
+        y = screen[scr(2)].workarea.y
+    }, screen = scr(2) } },
 
     { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },
 

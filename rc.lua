@@ -10,6 +10,7 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local mpd = require("mpd")
 
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/kstep/.config/awesome/theme.lua")
@@ -231,6 +232,8 @@ end
 uptime_widget = widgets.uptime()
 network_widget = widgets.network(widgets_config.wifi, 10)
 
+mpc = mpd.new(widgets_config.mpd)
+
 for s = 1, SCREENS do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
@@ -445,8 +448,29 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end),
     awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]]) end),
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end)
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
+
+    awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play(); notify_mpd_song(mpc) end),
+    awful.key({ }, "XF86AudioStop", function () mpc:stop() notify_mpd_song(mpc) end),
+    awful.key({ }, "XF86AudioNext", function () mpc:next(); notify_mpd_song(mpc) end),
+    awful.key({ }, "XF86AudioPrev", function () mpc:previous(); notify_mpd_song(mpc) end)
 )
+
+function notify_mpd_song(mpc)
+    local song = mpc:send("currentsong")
+    local status = mpc:send("status")
+    local icons = {
+        stop = "stop",
+        play = "start",
+        pause = "pause"
+    }
+    naughty.notify({
+        screen = scr(2),
+        icon = "/usr/share/icons/Adwaita/32x32/actions/media-playback-" .. icons[status.state] .. ".png",
+        title = song.title or song.file,
+        text = (song.artist or song.composer) .. " / " .. (song.album or song.artistalbum)
+    })
+end
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),

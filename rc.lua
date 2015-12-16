@@ -349,7 +349,7 @@ function notify_volume(mixer_output, toggle)
     local volicon = "medium"
     if muted or pvol == 0 then
         volicon = "muted"
-    elseif pvol < 20 then
+    elseif pvol < 40 then
         volicon = "low"
     elseif pvol > 80 then
         volicon = "high"

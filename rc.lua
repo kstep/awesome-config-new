@@ -450,13 +450,13 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
     awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
 
-    awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play(); notify_mpd_song(mpc) end),
-    awful.key({ }, "XF86AudioStop", function () mpc:stop() notify_mpd_song(mpc) end),
-    awful.key({ }, "XF86AudioNext", function () mpc:next(); notify_mpd_song(mpc) end),
-    awful.key({ }, "XF86AudioPrev", function () mpc:previous(); notify_mpd_song(mpc) end)
+    awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play(); notify_mpd_song() end),
+    awful.key({ }, "XF86AudioStop", function () mpc:stop() notify_mpd_song() end),
+    awful.key({ }, "XF86AudioNext", function () mpc:next(); notify_mpd_song() end),
+    awful.key({ }, "XF86AudioPrev", function () mpc:previous(); notify_mpd_song() end)
 )
 
-function notify_mpd_song(mpc)
+function notify_mpd_song()
     local song = mpc:send("currentsong")
     local status = mpc:send("status")
     local icons = {

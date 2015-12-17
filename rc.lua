@@ -469,7 +469,7 @@ function notify_mpd_song()
         screen = scr(2),
         icon = "/usr/share/icons/Adwaita/32x32/actions/media-playback-" .. icons[status.state] .. ".png",
         title = song.title or song.file,
-        text = (song.artist or song.composer) .. " / " .. (song.album or song.artistalbum)
+        text = (song.artist or song.composer or "Unknown Artist") .. " / " .. (song.album or song.artistalbum or "Unknown Album")
     })
 end
 

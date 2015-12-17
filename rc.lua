@@ -28,6 +28,14 @@ function scr(n)
 end
 
 naughty.config.defaults.screen = SCREENS
+naughty.config.defaults.icon_size = 32
+naughty.config.icon_dirs = {
+    "/usr/share/icons/Adwaita/",
+    "/usr/share/icons/gnome/",
+    "/usr/share/icons/oxygen/",
+    "/usr/share/icons/hicolor/",
+    "/usr/share/pixmaps/",
+}
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -337,8 +345,7 @@ function show_level_notification(title, percent, icon, muted)
         title = title .. (muted and "muted" or (percent .. "%")),
         text = bar,
         timeout = 5,
-        --icon = "/usr/share/icons/oxygen/32x32/status/audio-volume-" .. volicon .. ".png",
-        icon = "/usr/share/icons/oxygen/32x32/" .. icon .. ".png",
+        icon = icon,
         screen = scr(2) --screen.count(),
     }
 end
@@ -467,7 +474,7 @@ function notify_mpd_song()
     }
     naughty.notify({
         screen = scr(2),
-        icon = "/usr/share/icons/Adwaita/32x32/actions/media-playback-" .. icons[status.state] .. ".png",
+        icon = "actions/media-playback-" .. icons[status.state],
         title = song.title or song.file,
         text = (song.artist or song.composer or "Unknown Artist") .. " / " .. (song.album or song.artistalbum or "Unknown Album")
     })

@@ -28,6 +28,7 @@ function scr(n)
 end
 
 naughty.config.defaults.screen = SCREENS
+naughty.config.defaults.font = "DejaVu Sans Mono"
 naughty.config.defaults.icon_size = 32
 naughty.config.icon_dirs = {
     "/usr/share/icons/Adwaita/",

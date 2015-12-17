@@ -233,6 +233,7 @@ uptime_widget = widgets.uptime()
 network_widget = widgets.network(widgets_config.wifi, 10)
 
 mpc = mpd.new(widgets_config.mpd)
+kbdd_screen = scr(2)
 
 for s = 1, SCREENS do
     -- Create a promptbox for each screen
@@ -271,7 +272,7 @@ for s = 1, SCREENS do
 
     right_layout:add(mytextclock)
 
-    if s == SCREENS then right_layout:add(widgets.kbdd()) end
+    if s == kbdd_screen then right_layout:add(widgets.kbdd()) end
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)

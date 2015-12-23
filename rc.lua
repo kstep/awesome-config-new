@@ -330,8 +330,8 @@ else -- ALSA mixer
 end
 
 reset_backlight = "echo 0 | sudo tee '/sys/class/backlight/intel_backlight/bl_power'"
-lower_brightness = reset_backlight .. "; xbacklight -dec 10 -steps 5 -time 250"
-raise_brightness = reset_backlight .. "; xbacklight -inc 10 -steps 5 -time 250"
+lower_brightness = reset_backlight .. "; xbacklight -dec 1"
+raise_brightness = reset_backlight .. "; xbacklight -inc 1"
 
 local level_notification
 function show_level_notification(title, percent, icon, muted)

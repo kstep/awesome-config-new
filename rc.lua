@@ -551,7 +551,7 @@ awful.rules.rules = {
         "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
       properties = { tag = all_tags.www, focus = true, switchtotag = true } },
 
-    { rule = { class = "ViberPC" }, properties = { tag = all_tags.www, focus = false } },
+    { rule = { class = "ViberPC" }, properties = { tag = all_tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
         x = screen_right_edge(scr(2)) - 350,
         y = screen[scr(2)].workarea.y

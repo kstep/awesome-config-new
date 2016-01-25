@@ -530,7 +530,10 @@ awful.rules.rules = {
 
     { rule_any = { instance = {"chromium_app_list", "chrome_app_list"} }, properties = { floating = true } },
 
-    { rule = { role = "popup" }, properties = { y = 0, x = 0 } },
+    { rule = { role = "popup" }, properties = { screen = scr(2), geometry = {
+        x = screen_right_edge(scr(2)) - 350,
+        y = screen[scr(2)].workarea.y
+    } } },
 
     { rule_any = { class = {"SWT", "Eclipse"} }, properties = { tag = all_tags.java } },
 

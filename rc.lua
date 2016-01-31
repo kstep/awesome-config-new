@@ -544,7 +544,7 @@ awful.rules.rules = {
 
     { rule_any = { class = {"Gvim", "Atom Shell"} }, properties = { tag = all_tags.edit } },
 
-    { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.9, focus = true, switchtotag = true } },
+    { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.95, focus = true, switchtotag = true } },
 
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
 

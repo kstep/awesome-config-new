@@ -41,6 +41,7 @@ dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
 dbus.connect_signal("ru.gentoo.kbdd", function (src, layout)
     widget:update(layout)
 end)
+widget:update(0)
 set_layout(0)
 
 function kbdd.mt:__call(...)

@@ -97,7 +97,9 @@ local layouts =
 -- {{{ Wallpaper
 if beautiful.wallpaper then
     for s = 1, screen.count() do
-        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+        local g = screen[s].geometry
+        local wp = beautiful.wallpaper:format(g.width, g.height)
+        gears.wallpaper.maximized(wp, s, true)
     end
 end
 -- }}}

@@ -137,7 +137,7 @@ tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, screen = scr(2) },
     skype = { position = 2, layout = layout.tile, screen = 1, mwfact = 0.7 },
     www  = { position = 3, layout = layout.max, screen = scr(3) },
-    mail = { position = 4, layout = layout.max, screen = 1 },
+    mail = { position = 4, layout = layout.max, screen = scr(3) },
     video = { position = 5, screen = scr(2), layout = layout.max.fullscreen },
     debug = { position = 6, screen = scr(3), layout = layout.tile.bottom },
     edit = { position = 7, layout = layout.tile.bottom, screen = scr(2) },
@@ -555,6 +555,8 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
 
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
+
+    { rule = { class = "Nylon N1" }, properties = { tag = all_tags.mail } },
 
     { rule_any = { class = {
         "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",

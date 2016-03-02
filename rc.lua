@@ -558,7 +558,7 @@ awful.rules.rules = {
 
     { rule = { class = "VCLSalFrame" }, properties = { tag = all_tags.libre } },
 
-    { rule = { class = "Nylon N1" }, properties = { tag = all_tags.mail } },
+    { rule_any = { class = { "Geary", "Nylon N1" } }, properties = { tag = all_tags.mail } },
 
     { rule_any = { class = {
         "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",

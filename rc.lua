@@ -534,7 +534,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
 
-    { rule = { class = "SshAskpass" }, properties = { ontop = true, floating = true, modal = true, sticky = true } },
+    { rule = { class = "SshAskpass" }, properties = { ontop = true, floating = true, modal = true, sticky = true, tag = all_tags.term } },
 
     { rule_any = { instance = {"chromium_app_list", "chrome_app_list"} }, properties = { floating = true } },
 

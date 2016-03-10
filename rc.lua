@@ -62,6 +62,12 @@ do
         in_error = false
     end)
 end
+
+function log(msg)
+    naughty.notify({ preset = naughty.config.presets.critical,
+        title = "Debug",
+        text = msg })
+end
 -- }}}
 
 -- {{{ Variable definitions

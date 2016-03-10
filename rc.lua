@@ -375,6 +375,26 @@ function notify_brightness(output)
     show_level_notification("Brightness ", brightness, "devices/video-display")
 end
 
+function invert_current_client()
+    local command = "/usr/bin/dbus-send --print-reply --dest=com.github.chjj.compton._0 /com/github/chjj com.github.chjj.compton."
+
+    awful.util.spawn(command .. "opts_set string:track_focus boolean:true")
+
+    local output = awful.util.pread(command .. "find_win string:focused")
+
+    if output then
+        local winid = output:match("uint32 (%d+)")
+
+        if winid then
+            local output = awful.util.pread(command .. "win_get uint32:" .. winid .. " string:invert_color")
+            if output then
+                local invert = output:match("boolean (%w+)") == "true"
+                awful.util.spawn(command .. "win_set uint32:" .. winid .. " string:invert_color_force uint16:" .. (invert and 0 or 1))
+            end
+        end
+    end
+end
+
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ }, "Pause", function ()
@@ -427,7 +447,8 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Shift"   }, "Return", function () awful.util.spawn("systemctl --user start st-tmux@default.service") end),
-    awful.key({ modkey,           }, "i", function () awful.util.spawn("xrandr-invert-colors -s " .. math.floor(mouse.screen - 1)) end),
+    awful.key({ modkey,           }, "i", invert_current_client),
+    awful.key({ modkey, "Control" }, "i", function () awful.util.spawn("xrandr-invert-colors -s " .. math.floor(mouse.screen - 1)) end),
     awful.key({ modkey, "Shift"   }, "i", function () awful.util.spawn("xrandr-invert-colors") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),

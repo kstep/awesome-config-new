@@ -27,7 +27,7 @@ function scr(n)
     return math.min(n, SCREENS)
 end
 
-naughty.config.defaults.screen = SCREENS
+naughty.config.defaults.screen = scr(2)
 --naughty.config.defaults.font = "DejaVu Sans Mono"
 naughty.config.defaults.font = "Noto Mono 10"
 naughty.config.defaults.icon_size = 32

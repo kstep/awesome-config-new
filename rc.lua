@@ -582,8 +582,6 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "gimp" }, properties = { floating = true } },
 
-    { rule = { class = "Skype" }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
-
     { rule_any = { class = {"Gvim", "Atom Shell"} }, properties = { tag = all_tags.edit } },
 
     { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.95, focus = true, switchtotag = true } },
@@ -598,6 +596,8 @@ awful.rules.rules = {
         "chromium", "google-chrome", "google-chrome-beta", "google-chrome-unstable",
         "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
       properties = { tag = all_tags.www, focus = true, switchtotag = true } },
+
+    { rule_any = { class = {"Skype"}, instance = {"web.skype.com"} }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
 
     { rule = { class = "ViberPC" }, properties = { tag = all_tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {

@@ -39,19 +39,15 @@ local default_status_color = theme.colors.orange
 
 function battery.new(battery, timeout)
     local esrc = event_source(battery, timeout)
+    local energy = 0
 
     local widget = wibox.widget {
-        {
-            max_value = 100,
-            widget = wibox.widget.progressbar,
-            value = 0
-        },
-        forced_width = 10,
-        layout = wibox.container.rotate,
-        direction = 'east',
+        max_value = 100,
+        value = energy,
+        color = default_status_color,
+        widget = wibox.widget.progressbar,
+        background_color = theme.bg_normal,
     }
-    
-    local energy = 0
 
     widget.esource = esrc
     widget.update = function (esrc, value)
@@ -73,7 +69,12 @@ function battery.new(battery, timeout)
         end
     }
 
-    return widget
+    return wibox.widget {
+        widget,
+        forced_width = 10,
+        layout = wibox.container.rotate,
+        direction = 'east'
+    }
 end
 
 function battery.mt:__call(...)

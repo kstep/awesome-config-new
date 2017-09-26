@@ -1,4 +1,5 @@
 local math = math
+local io = io
 
 local util = { mt = {} }
 
@@ -34,6 +35,13 @@ end
 
 function util.trim(value)
     return util.rtril(util.ltrim(value))
+end
+
+function util.pread(command)
+    local out = io.popen(command)
+    local result = out:read("*a")
+    out:close()
+    return result
 end
 
 return util

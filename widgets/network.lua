@@ -98,7 +98,7 @@ function network.new(interface, timeout)
         objects = { widget },
         timeout = timeout or 10,
         timer_function = function ()
-            local result = wutil.rtrim(util.pread(tooltip_cmd) or 'Not connected.')
+            local result = wutil.rtrim(wutil.pread(tooltip_cmd) or 'Not connected.')
             return util.escape(result)
         end
     }

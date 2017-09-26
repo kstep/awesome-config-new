@@ -1,6 +1,7 @@
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
+local wutil = require("widgets.util")
 awful.rules = require("awful.rules")
 -- Widget and layout library
 local wibox = require("wibox")
@@ -286,7 +287,7 @@ awful.screen.connect_for_each_screen(function(s)
         uptime_widget,
         network_widget,
         mytextclock,
-        --battery_widgets,
+        battery_widgets,
         --widgets.kbdd(),
         kbdlayout_widget,
         mylayoutbox
@@ -389,13 +390,13 @@ function invert_current_client()
 
     awful.spawn(command .. "opts_set string:track_focus boolean:true")
 
-    local output = awful.util.pread(command .. "find_win string:focused")
+    local output = wutil.pread(command .. "find_win string:focused")
 
     if output then
         local winid = output:match("uint32 (%d+)")
 
         if winid then
-            local output = awful.util.pread(command .. "win_get uint32:" .. winid .. " string:invert_color")
+            local output = wutil.pread(command .. "win_get uint32:" .. winid .. " string:invert_color")
             if output then
                 local invert = output:match("boolean (%w+)") == "true"
                 awful.spawn(command .. "win_set uint32:" .. winid .. " string:invert_color_force uint16:" .. (invert and 0 or 1))
@@ -489,15 +490,15 @@ globalkeys = awful.util.table.join(
               end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
-    awful.key({ }, "XF86AudioRaiseVolume", function () notify_volume(awful.util.pread(raise_volume)) end),
-    awful.key({ }, "XF86AudioLowerVolume", function () notify_volume(awful.util.pread(lower_volume)) end),
-    awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () notify_volume(wutil.pread(raise_volume)) end),
+    awful.key({ }, "XF86AudioLowerVolume", function () notify_volume(wutil.pread(lower_volume)) end),
+    awful.key({ }, "XF86AudioMute", function () notify_volume(wutil.pread(toggle_volume, true)) end),
     awful.key({ }, "XF86TouchpadToggle", toggle_touchpad),
     awful.key({ }, "XF86Tools", toggle_touchpad),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
-    awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness .. "0"); notify_brightness(awful.util.pread("xbacklight -get")) end),
-    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness .. "0"); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
 
     awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play() end),
     awful.key({ }, "XF86AudioStop", function () mpc:stop() end),

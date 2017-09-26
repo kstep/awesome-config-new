@@ -266,6 +266,9 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create a tasklist widget
     local mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist_buttons)
 
+    -- Create keyboard layout widget
+    local kbdlayout_widget = awful.widget.keyboardlayout()
+
     -- Create the wibox
     local mywibox = awful.wibar({ position = "top", screen = s })
 
@@ -284,7 +287,8 @@ awful.screen.connect_for_each_screen(function(s)
         network_widget,
         mytextclock,
         --battery_widgets,
-        widgets.kbdd(),
+        --widgets.kbdd(),
+        kbdlayout_widget,
         mylayoutbox
     }
 

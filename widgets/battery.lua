@@ -2,9 +2,10 @@ local sys = require('esources.sys')
 local wutil = require('widgets.util')
 
 local util = require('awful.util')
-local progressbar = require('awful.widget.progressbar')
+local progressbar = require('wibox.widget.progressbar')
 local tooltip = require('awful.tooltip')
 local theme = require('beautiful')
+local rotate = require("wibox.container.rotate")
 
 local setmetatable = setmetatable
 
@@ -42,7 +43,6 @@ function battery.new(battery, timeout)
     local widget = progressbar { width = 10 }
     local energy = 0
     widget:set_max_value(100)
-    widget:set_vertical(true)
 
     widget.esource = esrc
     widget.update = function (esrc, value)
@@ -64,7 +64,7 @@ function battery.new(battery, timeout)
         end
     }
 
-    return widget
+    return rotate(widget)
 end
 
 function battery.mt:__call(...)

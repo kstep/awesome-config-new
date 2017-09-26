@@ -1,9 +1,10 @@
 
 local dbus = dbus
 local textbox = require('wibox.widget.textbox')
-local bg = require('wibox.widget.background')
+local bg = require('wibox.container.background')
 local theme = require('beautiful')
-local util = require('awful.util')
+local awful = require('awful')
+local gears = require('gears')
 local button = require('awful.button')
 
 local setmetatable = setmetatable
@@ -19,13 +20,13 @@ widget.bg:set_fg('#ffffff')
 widget.bg:set_widget(widget)
 
 local function set_layout(num)
-    util.spawn("/usr/bin/dbus-send --dest=ru.gentoo.KbddService /ru/gentoo/KbddService ru.gentoo.kbdd.set_layout uint32:" .. num)
+    awful.spawn("/usr/bin/dbus-send --dest=ru.gentoo.KbddService /ru/gentoo/KbddService ru.gentoo.kbdd.set_layout uint32:" .. num)
 end
 local function switch_layout(dir)
-    util.spawn("/usr/bin/dbus-send --dest=ru.gentoo.KbddService /ru/gentoo/KbddService ru.gentoo.kbdd." .. dir .. "_layout")
+    awful.spawn("/usr/bin/dbus-send --dest=ru.gentoo.KbddService /ru/gentoo/KbddService ru.gentoo.kbdd." .. dir .. "_layout")
 end
 
-widget:buttons(util.table.join(
+widget:buttons(gears.table.join(
     button({ }, 1, function () switch_layout("next") end),
     button({ }, 4, function () switch_layout("next") end),
     button({ }, 5, function () switch_layout("prev") end)

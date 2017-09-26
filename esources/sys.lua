@@ -22,7 +22,7 @@ function new(args)
 
     local old_value = {}
     local esrc = object()
-    esrc:add_signal('value::updated')
+    --esrc:add_signal('value::updated')
 
     local update = function (self)
 	local value = {}
@@ -43,7 +43,9 @@ function new(args)
     esrc.timer = poll(timeout)
 
     esrc.timer:connect_signal('timeout', function () esrc:update() end)
-    esrc.timer:start()
+    if not esrc.timer.started then
+        esrc.timer:start()
+    end
 
     return esrc
 end

@@ -2,15 +2,16 @@
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
-require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
--- Theme handling library
-local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
 local mpd = require("mpd")
+-- Theme handling library
+local beautiful = require("beautiful")
+
+require("awful.autofocus")
 
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/kstep/.config/awesome/theme.lua")
@@ -116,8 +117,8 @@ function create_tag_keys(i, tag)
     return awful.util.table.join(
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
-                      awful.tag.viewonly(tag)
-                      awful.screen.focus(awful.tag.getscreen(tag))
+                      tag:view_only()
+                      awful.screen.focus(tag.screen)
                   end),
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
@@ -192,23 +193,18 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
-mywibox = {}
-mypromptbox = {}
-mylayoutbox = {}
-mytaglist = {}
-mytaglist.buttons = awful.util.table.join(
-                    awful.button({ }, 1, awful.tag.viewonly),
+mytaglist_buttons = awful.util.table.join(
+                    awful.button({ }, 1, function (t) t:view_only() end),
                     awful.button({ modkey }, 1, awful.client.movetotag),
                     awful.button({ }, 3, awful.tag.viewtoggle),
                     awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
                     )
-mytasklist = {}
-mytasklist.buttons = awful.util.table.join(
+mytasklist_buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
                                               if c == client.focus then
                                                   c.minimized = true
@@ -217,7 +213,7 @@ mytasklist.buttons = awful.util.table.join(
                                                   -- :isvisible() makes no sense
                                                   c.minimized = false
                                                   if not c:isvisible() then
-                                                      awful.tag.viewonly(c:tags()[1])
+                                                      c:tags()[1]:view_only()
                                                   end
                                                   -- This will also un-minimize
                                                   -- the client, if needed
@@ -243,7 +239,7 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 local widgets_config = require("widgets.config")
-battery_widgets = {}
+battery_widgets = { layout = wibox.layout.fixed.horizontal }
 for i, battery in ipairs(widgets_config.batteries) do
     battery_widgets[i] = widgets.battery(battery, 10)
 end
@@ -253,54 +249,57 @@ network_widget = widgets.network(widgets_config.wifi, 10)
 mpc = mpd.new(widgets_config.mpd)
 kbdd_screen = scr(2)
 
-for s = 1, SCREENS do
+awful.screen.connect_for_each_screen(function(s)
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt()
+    local mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
-    mylayoutbox[s] = awful.widget.layoutbox(s)
-    mylayoutbox[s]:buttons(awful.util.table.join(
-                           awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+    local mylayoutbox = awful.widget.layoutbox(s)
+    mylayoutbox:buttons(awful.util.table.join(
+                        awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
+                        awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
+                        awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
+                        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.noempty, mytaglist.buttons)
+    local mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.noempty, mytaglist_buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    local mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist_buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    local mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Widgets that are aligned to the left
-    local left_layout = wibox.layout.fixed.horizontal()
-    left_layout:add(mytaglist[s])
-    left_layout:add(mypromptbox[s])
+    local left_layout = {
+        layout = wibox.layout.fixed.horizontal,
+        mytaglist,
+        mypromptbox
+    }
 
     -- Widgets that are aligned to the right
-    local right_layout = wibox.layout.fixed.horizontal()
-    if s == SCREENS then right_layout:add(wibox.widget.systray()) end
-
-    for _, battery_widget in ipairs(battery_widgets) do
-        right_layout:add(battery_widget)
-    end
-    right_layout:add(uptime_widget)
-    right_layout:add(network_widget)
-
-    right_layout:add(mytextclock)
-
-    if s == kbdd_screen then right_layout:add(widgets.kbdd()) end
-    right_layout:add(mylayoutbox[s])
+    local right_layout = {
+        layout = wibox.layout.fixed.horizontal,
+        wibox.widget.systray(),
+        uptime_widget,
+        network_widget,
+        mytextclock,
+        --battery_widgets,
+        widgets.kbdd(),
+        mylayoutbox
+    }
 
     -- Now bring it all together (with the tasklist in the middle)
-    local layout = wibox.layout.align.horizontal()
-    layout:set_left(left_layout)
-    layout:set_middle(mytasklist[s])
-    layout:set_right(right_layout)
+    local layout = {
+        layout = wibox.layout.align.horizontal,
+        left_layout,
+        mytasklist,
+        right_layout
+    }
 
-    mywibox[s]:set_widget(layout)
-end
+    mywibox:setup(layout)
+
+    s.mywibox = mywibox
+end)
 -- }}}
 
 -- {{{ Mouse bindings
@@ -326,7 +325,7 @@ function parse_xbacklight_output(output)
 end
 
 local parse_mixer_output, raise_volume, lower_volume, toggle_volume
-if type(awful.util.spawn("ossvol")) == "number" then -- OSS mixer
+if type(awful.spawn("ossvol")) == "number" then -- OSS mixer
     parse_mixer_output = parse_oss_mixer_output
     raise_volume = "ossvol -i 1"
     lower_volume = "ossvol -d 1"
@@ -356,7 +355,7 @@ function show_level_notification(title, percent, icon, muted)
         text = bar,
         timeout = 5,
         icon = icon,
-        screen = scr(2) --screen.count(),
+        screen = mouse.screen --screen.count(),
     }
 end
 
@@ -384,7 +383,7 @@ end
 function invert_current_client()
     local command = "/usr/bin/dbus-send --print-reply --dest=com.github.chjj.compton._0 /com/github/chjj com.github.chjj.compton."
 
-    awful.util.spawn(command .. "opts_set string:track_focus boolean:true")
+    awful.spawn(command .. "opts_set string:track_focus boolean:true")
 
     local output = awful.util.pread(command .. "find_win string:focused")
 
@@ -395,36 +394,36 @@ function invert_current_client()
             local output = awful.util.pread(command .. "win_get uint32:" .. winid .. " string:invert_color")
             if output then
                 local invert = output:match("boolean (%w+)") == "true"
-                awful.util.spawn(command .. "win_set uint32:" .. winid .. " string:invert_color_force uint16:" .. (invert and 0 or 1))
+                awful.spawn(command .. "win_set uint32:" .. winid .. " string:invert_color_force uint16:" .. (invert and 0 or 1))
             end
         end
     end
 end
 
 function toggle_touchpad()
-    awful.util.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]])
+    awful.spawn_with_shell([[synclient | awk -F' *= *' '/TouchpadOff/{if ($2 == "0") { print 1 } else { print 0 }}' | xargs -I {} synclient TouchpadOff={}]])
 end
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ }, "Pause", function ()
-        awful.util.spawn_with_shell("systemctl --user start xorg-locker.service")
+        awful.spawn_with_shell("systemctl --user start xorg-locker.service")
     end),
     awful.key({ }, "Print", function ()
-        awful.util.spawn("scrot -s")
+        awful.spawn("scrot -s")
     end),
     awful.key({ modkey, }, "Left", function ()
         local tag
         repeat
             awful.tag.viewprev()
-            tag = awful.tag.selected()
+            tag = mouse.screen.selected_tag
         until #tag:clients() > 0
     end),
     awful.key({ modkey, }, "Right", function ()
         local tag
         repeat
             awful.tag.viewnext()
-            tag = awful.tag.selected()
+            tag = mouse.screen.selected_tag
         until #tag:clients() > 0
     end),
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore),
@@ -455,11 +454,11 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey, "Shift"   }, "Return", function () awful.util.spawn("systemctl --user start st-tmux@default.service") end),
+    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end),
+    awful.key({ modkey, "Shift"   }, "Return", function () awful.spawn("systemctl --user start st-tmux@default.service") end),
     awful.key({ modkey,           }, "i", invert_current_client),
-    awful.key({ modkey, "Control" }, "i", function () awful.util.spawn("xrandr-invert-colors -s " .. math.floor(mouse.screen - 1)) end),
-    awful.key({ modkey, "Shift"   }, "i", function () awful.util.spawn("xrandr-invert-colors") end),
+    awful.key({ modkey, "Control" }, "i", function () awful.spawn("xrandr-invert-colors -s " .. math.floor(mouse.screen - 1)) end),
+    awful.key({ modkey, "Shift"   }, "i", function () awful.spawn("xrandr-invert-colors") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -491,8 +490,10 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioMute", function () notify_volume(awful.util.pread(toggle_volume, true)) end),
     awful.key({ }, "XF86TouchpadToggle", toggle_touchpad),
     awful.key({ }, "XF86Tools", toggle_touchpad),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness .. "0"); notify_brightness(awful.util.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness .. "0"); notify_brightness(awful.util.pread("xbacklight -get")) end),
 
     awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play() end),
     awful.key({ }, "XF86AudioStop", function () mpc:stop() end),
@@ -513,7 +514,7 @@ function notify_mpd_song()
         pause = "pause"
     }
     naughty.notify({
-        screen = scr(2),
+        screen = mouse.screen,
         icon = "actions/media-playback-" .. icons[status.state],
         title = song.title or song.file,
         text = (song.artist or song.composer or "Unknown Artist") .. " / " .. (song.album or song.artistalbum or "Unknown Album")
@@ -572,17 +573,10 @@ awful.rules.rules = {
 
     { rule_any = { instance = {"chromium_app_list", "chrome_app_list"} }, properties = { floating = true } },
 
-    { rule = { role = "popup" }, properties = { screen = scr(2), geometry = {
-        x = screen_right_edge(scr(2)) - 350,
-        y = screen[scr(2)].workarea.y
-    } } },
-
     { rule_any = { class = {"SWT", "Eclipse"} }, properties = { tag = all_tags.java } },
 
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "gimp" }, properties = { floating = true } },
-
-    { rule_any = { class = {"Gvim", "Atom Shell"} }, properties = { tag = all_tags.edit } },
 
     { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.95, focus = true, switchtotag = true } },
 
@@ -599,7 +593,14 @@ awful.rules.rules = {
 
     { rule_any = { class = {"Skype"}, instance = {"web.skype.com"} }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
 
-    { rule = { class = "ViberPC" }, properties = { tag = all_tags.chat, focus = false } },
+    { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "Code"} }, properties = { tag = all_tags.edit } },
+
+    { rule = { role = "popup" }, properties = { screen = function () return mouse.screen end, geometry = function () return {
+        x = screen_right_edge(mouse.screen) - 350,
+        y = screen[mouse.screen].workarea.y
+    } end } },
+
+    { rule_any = { class = {"ViberPC", "TelegramDesktop", "Slack"} }, properties = { tag = all_tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
         x = screen_right_edge(scr(2)) - 350,
         y = screen[scr(2)].workarea.y
@@ -676,5 +677,5 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
---awful.util.spawn("/usr/bin/systemctl --user import-environment DISPLAY")
---awful.util.spawn("/usr/bin/systemctl --user start wm.target")
+--awful.spawn("/usr/bin/systemctl --user import-environment DISPLAY")
+--awful.spawn("/usr/bin/systemctl --user start wm.target")

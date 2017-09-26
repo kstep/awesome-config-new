@@ -1,6 +1,6 @@
 local textbox = require('wibox.widget.textbox')
 local wutil = require('widgets.util')
-local timer = timer
+local timer = require("gears.timer")
 local io = io
 local setmetatable = setmetatable
 
@@ -28,7 +28,9 @@ function uptime.new()
 
     widget.timer = timer { timeout = 60 }
     widget.timer:connect_signal('timeout', function () widget:update() end)
-    widget.timer:start()
+    if not widget.timer.started then
+        widget.timer:start()
+    end
 
     return widget
 end

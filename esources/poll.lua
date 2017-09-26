@@ -1,4 +1,4 @@
-local timer = timer
+local timer = require("gears.timer")
 local setmetatable = setmetatable
 
 module('esources.poll')

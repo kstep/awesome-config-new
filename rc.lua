@@ -533,6 +533,23 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey, "Shift"   }, "t",      function (c) c.sticky = not c.sticky          end),
+    awful.key({ modkey, "Control" }, "t",      function (c)
+        if c.sticky then
+            c.sticky = false
+            c.floating = false
+        else
+            local geo = c:geometry()
+            c.sticky = true
+            c.floating = true
+            c.maximized_horizontal = false
+            c.maximized_vertical = false
+            c:geometry({
+                x = screen_right_edge(mouse.screen) - geo.width,
+                y = screen_bottom_edge(mouse.screen) - geo.height
+            })
+        end
+    end),
     awful.key({ modkey,           }, "equal", function (c) c.opacity = c.opacity + 0.05 end),
     awful.key({ modkey,           }, "minus", function (c) c.opacity = c.opacity - 0.05 end),
     awful.key({ modkey,           }, "n",
@@ -562,6 +579,10 @@ root.keys(globalkeys)
 function screen_right_edge(num)
     local s = screen[num]
     return s.workarea.x + s.workarea.width
+end
+function screen_bottom_edge(num)
+    local s = screen[num]
+    return s.workarea.y + s.workarea.height
 end
 
 -- {{{ Rules

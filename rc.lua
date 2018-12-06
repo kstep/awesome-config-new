@@ -8,7 +8,7 @@ local wibox = require("wibox")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-local mpd = require("mpd")
+--local mpd = require("mpd")
 -- Theme handling library
 local beautiful = require("beautiful")
 
@@ -247,7 +247,7 @@ end
 uptime_widget = widgets.uptime()
 network_widget = widgets.network(widgets_config.wifi, 10)
 
-mpc = mpd.new(widgets_config.mpd)
+--mpc = mpd.new(widgets_config.mpd)
 kbdd_screen = scr(2)
 
 awful.screen.connect_for_each_screen(function(s)

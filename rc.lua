@@ -619,7 +619,7 @@ awful.rules.rules = {
 
     { rule_any = { class = {"Skype"}, instance = {"web.skype.com"} }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
 
-    { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "Code"} }, properties = { tag = all_tags.edit } },
+    { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "jetbrains-pycharm-ce", "Code"} }, properties = { tag = all_tags.edit } },
 
     { rule = { role = "popup" }, properties = { screen = function () return mouse.screen end, geometry = function () return {
         x = screen_right_edge(mouse.screen) - 350,

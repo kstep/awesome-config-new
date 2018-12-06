@@ -75,7 +75,7 @@ end
 -- {{{ Variable definitions
 
 -- This is used later as the default terminal and editor to run.
-terminal = "st"
+terminal = "xterm"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -460,7 +460,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end),
-    awful.key({ modkey, "Shift"   }, "Return", function () awful.spawn("systemctl --user start st-tmux@default.service") end),
+    awful.key({ modkey, "Shift"   }, "Return", function () awful.spawn("systemctl --user start xterm-tmux@default.service") end),
     awful.key({ modkey,           }, "i", invert_current_client),
     awful.key({ modkey, "Control" }, "i", function () awful.spawn("xrandr-invert-colors -s " .. math.floor(mouse.screen - 1)) end),
     awful.key({ modkey, "Shift"   }, "i", function () awful.spawn("xrandr-invert-colors") end),

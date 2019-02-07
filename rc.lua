@@ -325,6 +325,11 @@ function parse_oss_mixer_output(output, toggle)
     return dbvol * 100.0 / 25.0, toggle and (dbvol == 0.0)
 end
 
+function parse_pa_mixer_output(output, toggle)
+    local vol, muted = output:match("(%d+)\n(%a+)")
+    return tonumber(vol), muted == "true"
+end
+
 function parse_xbacklight_output(output)
     return tonumber(output:match("(%d+)"))
 end
@@ -335,6 +340,11 @@ if type(awful.spawn("ossvol")) == "number" then -- OSS mixer
     raise_volume = "ossvol -i 1"
     lower_volume = "ossvol -d 1"
     toggle_volume = "ossvol -t"
+elseif type(awful.spawn("pamixer")) == "number" then -- PA mixer
+    parse_mixer_output = parse_pa_mixer_output
+    raise_volume = "pamixer --increase 5 --allow-boost && pamixer --get-volume && pamixer --get-mute"
+    lower_volume = "pamixer --decrease 5 --allow-boost && pamixer --get-volume && pamixer --get-mute"
+    toggle_volume = "pamixer --toggle-mute && pamixer --get-volume && pamixer --get-mute"
 else -- ALSA mixer
     parse_mixer_output = parse_alsa_mixer_output
     raise_volume = "amixer -c " .. widgets_config.alsa_card .. " set Master playback 5+"

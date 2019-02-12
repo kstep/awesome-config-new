@@ -14,8 +14,10 @@ local beautiful = require("beautiful")
 
 require("awful.autofocus")
 
+HOME = os.getenv("HOME")
+
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/kstep/.config/awesome/theme.lua")
+beautiful.init(HOME .. "/.config/awesome/theme.lua")
 
 widgets = {
     battery = require("widgets.battery"),

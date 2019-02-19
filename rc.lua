@@ -399,7 +399,7 @@ function notify_volume(mixer_output, toggle)
         volicon = "high"
     end
 
-    show_level_notification("Volume ", pvol, "status/audio-volume-" .. volicon, muted)
+    show_level_notification("Volume ", pvol, "audio-volume-" .. volicon, muted)
 end
 
 function notify_brightness(output)

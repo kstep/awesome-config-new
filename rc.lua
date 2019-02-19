@@ -628,7 +628,7 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" }, properties = { floating = true } },
     { rule = { class = "gimp" }, properties = { floating = true } },
 
-    { rule_any = { class = {"st-256color", "XTerm"} }, properties = { tag = all_tags.term, opacity = 0.95, focus = true, switchtotag = true } },
+    { rule_any = { class = {"st-256color", "XTerm", "Xfce4-terminal"} }, properties = { tag = all_tags.term, opacity = 0.95, focus = true, switchtotag = true } },
 
     { rule = { class = "MPlayer" }, properties = { tag = all_tags.video } },
 
@@ -650,7 +650,7 @@ awful.rules.rules = {
         y = screen[mouse.screen].workarea.y
     } end } },
 
-    { rule_any = { class = {"ViberPC", "TelegramDesktop", "Slack"} }, properties = { tag = all_tags.chat, focus = false } },
+    { rule_any = { class = {"ViberPC", "TelegramDesktop", "Slack", "zoom"} }, properties = { tag = all_tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
         x = screen_right_edge(scr(2)) - 350,
         y = screen[scr(2)].workarea.y

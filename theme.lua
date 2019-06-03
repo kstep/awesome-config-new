@@ -1,10 +1,22 @@
 HOME = os.getenv("HOME")
 
---theme = dofile(HOME .. "/.config/awesome/themes/awesome-solarized/light/theme.lua")
+local gears = require("gears")
+
 theme = dofile(HOME .. "/.config/awesome/themes/awesome-solarized/dark/theme.lua")
---theme.wallpaper_cmd = { "awsetbg " .. HOME .. "/.config/awesome/wallpaper.png" }
 theme.wallpaper = HOME .. "/.config/awesome/wallpapers/girl.jpg"
---theme.wallpaper = HOME .. "/.config/awesome/wallpapers/WrongEye_%dx%d.png"
---theme.font = 'Terminus 8'
 theme.font = 'Noto Mono 8'
+
+theme.get_icon = function (icon_name)
+    return "/usr/share/icons/Humanity/status/24/" .. icon_name .. ".png"
+end
+
+theme.notification_font = 'Noto Mono 10'
+-- theme.notification_border_color = theme.border_normal
+theme.notification_border_width = 0
+theme.notification_opacity = 0.8
+theme.notification_margin = 10
+theme.notification_shape = function (cr, w, h)
+    return gears.shape.infobubble(cr, w, h, 10, 5, w - 20)
+end
+
 return theme

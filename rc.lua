@@ -31,10 +31,11 @@ function scr(n)
     return math.min(n, SCREENS)
 end
 
+naughty.config.padding = 15
 naughty.config.defaults.screen = scr(2)
---naughty.config.defaults.font = "DejaVu Sans Mono"
-naughty.config.defaults.font = "Noto Mono 10"
 naughty.config.defaults.icon_size = 32
+naughty.config.defaults.position = 'top_right'
+naughty.config.defaults.margin = theme.notification_margin
 naughty.config.icon_dirs = {
     "/usr/share/icons/Adwaita/",
     "/usr/share/icons/gnome/",

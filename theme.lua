@@ -3,7 +3,7 @@ HOME = os.getenv("HOME")
 local gears = require("gears")
 
 theme = dofile(HOME .. "/.config/awesome/themes/awesome-solarized/dark/theme.lua")
-theme.wallpaper = HOME .. "/.config/awesome/wallpapers/girl.jpg"
+theme.wallpaper = HOME .. "/.config/awesome/wallpapers/boards.jpg"
 theme.font = 'Noto Mono 8'
 
 theme.get_icon = function (icon_name)

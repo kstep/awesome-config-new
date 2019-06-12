@@ -570,8 +570,8 @@ clientkeys = awful.util.table.join(
             c.maximized_horizontal = false
             c.maximized_vertical = false
             c:geometry({
-                x = screen_right_edge(mouse.screen) - geo.width,
-                y = screen_bottom_edge(mouse.screen) - geo.height
+                x = screen_right_edge() - geo.width,
+                y = screen_bottom_edge() - geo.height
             })
         end
     end),
@@ -601,12 +601,12 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
-function screen_right_edge(num)
-    local s = screen[num]
+function screen_right_edge()
+    local s = mouse.screen
     return s.workarea.x + s.workarea.width
 end
-function screen_bottom_edge(num)
-    local s = screen[num]
+function screen_bottom_edge()
+    local s = mouse.screen
     return s.workarea.y + s.workarea.height
 end
 
@@ -642,19 +642,23 @@ awful.rules.rules = {
         "Firefox", "Dwb", "Vimb", "Opera"}, instance = {"Browser"}, role = {"browser"} },
       properties = { tag = all_tags.www, focus = true, switchtotag = true } },
 
+    { rule = { name = "Picture in picture" }, properties = { floating = true, geometry = {
+        width = 380, height = 215, x = screen_right_edge() - 400, y = screen_bottom_edge() - 240
+    } } },
+
     { rule_any = { class = {"Skype"}, instance = {"web.skype.com"} }, properties = { tag = all_tags.skype, focus = true, switchtotag = true } },
 
     { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "jetbrains-pycharm-ce", "Code"} }, properties = { tag = all_tags.edit } },
 
     { rule = { role = "popup" }, properties = { screen = function () return mouse.screen end, geometry = function () return {
-        x = screen_right_edge(mouse.screen) - 350,
-        y = screen[mouse.screen].workarea.y
+        x = screen_right_edge() - 350,
+        y = mouse.screen.workarea.y
     } end } },
 
     { rule_any = { class = {"ViberPC", "TelegramDesktop", "Slack", "zoom"} }, properties = { tag = all_tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
-        x = screen_right_edge(scr(2)) - 350,
-        y = screen[scr(2)].workarea.y
+        x = screen_right_edge() - 350,
+        y = mouse.screen.workarea.y
     }, screen = scr(2) } },
 
     { rule = { name = "^Karma" }, properties = { tag = all_tags.karma } },

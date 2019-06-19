@@ -1,3 +1,5 @@
+local naughty = require("naughty")
+
 local math = math
 local io = io
 
@@ -42,6 +44,24 @@ function util.pread(command)
     local result = out:read("*a")
     out:close()
     return result
+end
+
+local level_notification
+function util.show_level_notification(title, percent, icon, text)
+    local barsize = math.floor(percent / 10)
+    local bar = ("▣"):rep(barsize) .. ("□"):rep(10 - barsize)
+
+    if level_notification then
+        naughty.destroy(level_notification)
+    end
+
+    level_notification = naughty.notify {
+        title = title .. (text or (percent .. "%")),
+        text = bar,
+        timeout = 5,
+        icon = icon,
+        screen = mouse.screen,
+    }
 end
 
 return util

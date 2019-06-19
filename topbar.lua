@@ -6,8 +6,8 @@ local layouts = require("layouts")
 
 local widgets_config = require("widgets.config")
 local widgets = {
-    --battery = require("widgets.battery"),
-    --network = require("widgets.network"),
+    battery = require("widgets.battery"),
+    network = require("widgets.network"),
     uptime = require("widgets.uptime"),
 }
 

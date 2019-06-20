@@ -1,16 +1,20 @@
 local timer = require("gears.timer")
 local setmetatable = setmetatable
 
-local _M = {}
+local poll = { mt = {} }
 
 local pollers = {}
 
-local function new(timeout)
+function poll.new(timeout)
     if not pollers[timeout] then
 	pollers[timeout] = timer { timeout = timeout }
     end
     return pollers[timeout]
 end
 
-return setmetatable(_M, { __call = function (_, ...) return new(...) end })
+function poll.mt:__call(...)
+    return poll.new(...)
+end
+
+return setmetatable(poll, poll.mt)
 

@@ -11,7 +11,7 @@ awful.rules.rules = require("rules")
 
 local naughty = require("naughty")
 naughty.config.defaults.margin = theme.notification_margin
-naughty.config.icon_size = theme.notification_icon_size
+naughty.config.defaults.icon_size = theme.notification_icon_size
 naughty.config.icon_dirs = theme.notification_icon_dirs
 
 local menubar = require("menubar")

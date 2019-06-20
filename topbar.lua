@@ -65,11 +65,11 @@ if widgets.uptime then
     uptime_widget = widgets.uptime()
 end
 
-if widgets.network then
+if widgets.network and widgets_config.wifi then
     network_widget = widgets.network(widgets_config.wifi, 10)
 end
 
-if widgets.battery then
+if widgets.battery and widgets_config.batteries then
     battery_widgets = { layout = wibox.layout.fixed.horizontal }
     for i, battery in ipairs(widgets_config.batteries) do
         battery_widgets[i] = widgets.battery(battery, 10)

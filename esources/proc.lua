@@ -5,9 +5,9 @@ local timer = require("gears.timer")
 local io = io
 local table = table
 
-module('esources.proc')
+local _M = {}
 
-function new(args)
+local function new(args)
     local timeout = args.timeout or 10
     local proc_path = '/proc/' .. args.path
     local fields = args.fields
@@ -49,6 +49,5 @@ function new(args)
     return esrc
 end
 
-setmetatable(_M, { __call = function (_, ...) return new(...) end })
-
+return setmetatable(_M, { __call = function (_, ...) return new(...) end })
 

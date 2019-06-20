@@ -4,7 +4,7 @@ local pairs = pairs
 local setmetatable = setmetatable
 local io = io
 
-module('esources.sys')
+local _M = {}
 
 local function readfile(filename, format)
     local file = io.open(filename)
@@ -15,7 +15,7 @@ local function readfile(filename, format)
     return result
 end
 
-function new(args)
+local function new(args)
     local timeout = args.timeout or 10
     local sys_path = '/sys/' .. args.path .. '/'
     local fields = args.fields
@@ -50,5 +50,5 @@ function new(args)
     return esrc
 end
 
-setmetatable(_M, { __call = function (_, ...) return new(...) end })
+return setmetatable(_M, { __call = function (_, ...) return new(...) end })
 

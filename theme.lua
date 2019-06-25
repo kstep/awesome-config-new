@@ -19,7 +19,9 @@ theme.notification_icon_dirs = {
     "/usr/share/icons/Adwaita/",
     "/usr/share/icons/gnome/",
     "/usr/share/icons/oxygen/",
+    "/usr/share/icons/oxygen/base/",
     "/usr/share/icons/hicolor/",
+    "/usr/share/icons/HighContrast/",
     "/usr/share/pixmaps/",
 }
 

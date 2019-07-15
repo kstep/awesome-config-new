@@ -3,6 +3,7 @@ local menubar = require("menubar")
 local wutil = require("widgets.util")
 local naughty = require("naughty")
 local volume = require("volume")
+local layouts = require("layouts")
 
 
 local reset_backlight = "echo 0 | sudo tee '/sys/class/backlight/intel_backlight/bl_power'"

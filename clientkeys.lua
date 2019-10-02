@@ -31,6 +31,7 @@ clientkeys = awful.util.table.join(
             local geo = c:geometry()
             c.sticky = true
             c.floating = true
+            c.maximized = false
             c.maximized_horizontal = false
             c.maximized_vertical = false
             c:geometry({
@@ -49,8 +50,15 @@ clientkeys = awful.util.table.join(
         end),
     awful.key({ modkey,           }, "m",
         function (c)
+            c.maximized = not c.maximized
+        end),
+    awful.key({ modkey, "Control" }, "m",
+        function (c)
             c.maximized_horizontal = not c.maximized_horizontal
-            c.maximized_vertical   = not c.maximized_vertical
+        end),
+    awful.key({ modkey, "Shift"   }, "m",
+        function (c)
+            c.maximized_vertical = not c.maximized_vertical
         end)
 )
 

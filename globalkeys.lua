@@ -44,10 +44,10 @@ end
 
 local globalkeys = awful.util.table.join(
     awful.key({ }, "Pause", function ()
-        awful.spawn_with_shell("systemctl --user start xorg-locker.service")
+        awful.spawn.with_shell("systemctl --user start xorg-locker.service")
     end),
     awful.key({ }, "Print", function ()
-        awful.spawn("scrot -s")
+        awful.spawn.with_shell("sleep 1 && scrot -s")
     end),
     awful.key({ modkey, }, "Left", function ()
         local tag
@@ -122,6 +122,7 @@ local globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
+    awful.key({ modkey, "Shift" }, "x", function () awful.spawn("xkill") end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
 
@@ -136,10 +137,10 @@ local globalkeys = awful.util.table.join(
 
     awful.key({ }, "XF86TouchpadToggle", toggle_touchpad),
     awful.key({ }, "XF86Tools", toggle_touchpad),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
-    awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn_with_shell(raise_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
-    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn_with_shell(lower_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn.with_shell(raise_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn.with_shell(lower_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn.with_shell(raise_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn.with_shell(lower_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
 
     awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play() end),
     awful.key({ }, "XF86AudioStop", function () mpc:stop() end),

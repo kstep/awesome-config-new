@@ -2,11 +2,13 @@ HOME = os.getenv("HOME")
 
 local gears = require("gears")
 
+font_face = 'Noto Sans Mono'
+
 theme = dofile(HOME .. "/.config/awesome/themes/awesome-solarized/dark/theme.lua")
 theme.wallpaper = HOME .. "/.config/awesome/wallpapers/boards.jpg"
-theme.font = 'Noto Mono 8'
+theme.font = font_face .. ' 8'
 
-theme.notification_font = 'Noto Mono 10'
+theme.notification_font = font_face .. ' 10'
 -- theme.notification_border_color = theme.border_normal
 theme.notification_border_width = 0
 theme.notification_opacity = 0.8

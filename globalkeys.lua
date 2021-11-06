@@ -110,7 +110,7 @@ local globalkeys = awful.util.table.join(
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
-    awful.key({ modkey }, "z", function () awful.spawn("dm-tool lock") end),
+    awful.key({ modkey }, "z", function () awful.spawn("xfce4-screensaver-command --lock") end),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),

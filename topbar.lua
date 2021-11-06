@@ -105,6 +105,13 @@ return function (s)
     -- Create keyboard layout widget
     local kbdlayout_widget = awful.widget.keyboardlayout()
 
+    local vkbd_widget = awful.widget.button({
+        image = theme.awesome_icon
+    })
+    vkbd_widget:buttons(awful.button({}, 1, nil, function ()
+        awful.screen.focused().vkbd:toggle()
+    end))
+
     -- Create the wibox
     local mywibox = awful.wibar({ position = "top", screen = s })
 
@@ -123,6 +130,7 @@ return function (s)
         network_widget,
         mytextclock,
         battery_widgets,
+        vkbd_widget,
         kbdlayout_widget,
         mylayoutbox
     }

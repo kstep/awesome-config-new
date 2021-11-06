@@ -21,6 +21,11 @@ menubar.utils.terminal = terminal
 require("awful.autofocus")
 require("handlers")
 
+local vkbd = require("vkbd")
+awful.screen.connect_for_each_screen(function (s)
+    s.vkbd = vkbd:new({ screen = s } )
+end)
+
 local topbar = require("topbar")
 awful.screen.connect_for_each_screen(topbar)
 

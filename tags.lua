@@ -11,6 +11,8 @@ local tags_desc = {
     edit = { position = 7, layout = layout.tile.bottom, },
     util = { position = 8, layout = layout.tile.bottom, },
 
+    music = { layout = layout.max, },
+
     chat = { layout = layout.tile, },
     java = { layout = layout.max, },
     gimp = { layout = layout.max, },

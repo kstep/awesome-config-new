@@ -35,6 +35,8 @@ return {
 
     { rule = { class = "MPlayer" }, properties = { tag = tags.video } },
 
+    { rule = { class = "Spotify" }, properties = { tag = tags.music } },
+
     { rule = { class = "VCLSalFrame" }, properties = { tag = tags.libre } },
 
     { rule_any = { class = { "Geary", "Nylon N1" } }, properties = { tag = tags.mail } },
@@ -57,6 +59,7 @@ return {
         y = mouse.screen.workarea.y
     } end } },
 
+    { rule = { class = "discord" }, properties = { tag = tags.chat } },
     { rule_any = { class = {"ViberPC", "TelegramDesktop", "Slack", "zoom"} }, properties = { tag = tags.chat, focus = false } },
     { rule = { class = "ViberPC", name = "Form" }, properties = { floating = true, geometry = {
         x = screen_right_edge() - 350,

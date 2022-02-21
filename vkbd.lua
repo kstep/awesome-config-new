@@ -77,17 +77,15 @@ function module.button(attributes)
                 boxbg.fg = attr.fg
             else
                 command = "key_press"
-                boxbg.on = false
+                boxbg.on = true
                 boxbg.bg = press_bg_color
                 boxbg.fg = press_fg_color
             end
 
-            --awful.spawn("xdotool key" .. command .. attr.keycode)
             root.fake_input(command, attr.keycode)
         end)
     else
         boxbg:connect_signal("button::press", function()
-            --awful.spawn("xdotool key " .. attr.keycode)
             root.fake_input("key_press", attr.keycode)
             root.fake_input("key_release", attr.keycode)
 

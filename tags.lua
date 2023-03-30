@@ -1,10 +1,11 @@
 local awful = require("awful")
 local layout = awful.layout.suit
+local screens = screen.count()
 
 local tags_desc = {
     term = { position = 1, layout = layout.tile.bottom, },
     skype = { position = 2, layout = layout.tile, mwfact = 0.7 },
-    www  = { position = 3, layout = layout.max, },
+    www  = { position = 3, layout = layout.max, screen = screens, },
     mail = { position = 4, layout = layout.max, },
     video = { position = 5, layout = layout.max.fullscreen },
     debug = { position = 6, layout = layout.tile.bottom },
@@ -12,6 +13,7 @@ local tags_desc = {
     util = { position = 8, layout = layout.tile.bottom, },
 
     music = { layout = layout.max, },
+    game = { layout = layout.max, },
 
     chat = { layout = layout.tile, },
     java = { layout = layout.max, },
@@ -21,12 +23,13 @@ local tags_desc = {
     libre = { },
     droid = { },
     karma = { layout = layout.fair },
+
+    alt = { screen = screens }
 }
 
 local tags = {}
 local all_tags = {}
 
-local screens = screen.count()
 for s = 1, screens do
     tags[s] = {}
 end

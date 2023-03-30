@@ -36,6 +36,9 @@ return {
     { rule = { class = "MPlayer" }, properties = { tag = tags.video } },
 
     { rule = { class = "Spotify" }, properties = { tag = tags.music } },
+    { rule = { class = "Steam" }, properties = { tag = tags.game } },
+
+    { rule = { class = "Lxrandr" }, properties = { tag = tags.term } },
 
     { rule = { class = "VCLSalFrame" }, properties = { tag = tags.libre } },
 
@@ -52,7 +55,7 @@ return {
 
     { rule_any = { class = {"Skype"}, instance = {"web.skype.com"} }, properties = { tag = tags.skype, focus = true, switchtotag = true } },
 
-    { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "jetbrains-pycharm-ce", "Code"} }, properties = { tag = tags.edit } },
+    { rule_any = { class = {"Emacs", "Gvim", "Atom Shell", "jetbrains-idea-ce", "jetbrains-pycharm-ce", "jetbrains-clion", "Code"} }, properties = { tag = tags.edit } },
 
     { rule = { role = "popup" }, properties = { screen = function () return mouse.screen end, geometry = function () return {
         x = screen_right_edge() - 350,

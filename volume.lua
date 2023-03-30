@@ -36,6 +36,10 @@ end
 
 local function parse_pulsemixer_output(output, toggle)
     local voll, volr, muted = output:match("(%d+) (%d+)\n(%d)")
+    if not voll then
+        voll, muted = output:match("(%d+)\n(%d)")
+        volr = voll
+    end
     return math.min(tonumber(voll), tonumber(volr)), muted == "1"
 end
 

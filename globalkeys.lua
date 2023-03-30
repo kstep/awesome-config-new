@@ -140,12 +140,12 @@ local globalkeys = awful.util.table.join(
     awful.key({ }, "XF86MonBrightnessUp", function () awful.spawn.with_shell(raise_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
     awful.key({ }, "XF86MonBrightnessDown", function () awful.spawn.with_shell(lower_brightness); notify_brightness(wutil.pread("xbacklight -get")) end),
     awful.key({ "Shift" }, "XF86MonBrightnessUp", function () awful.spawn.with_shell(raise_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
-    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn.with_shell(lower_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end),
+    awful.key({ "Shift" }, "XF86MonBrightnessDown", function () awful.spawn.with_shell(lower_brightness .. "0"); notify_brightness(wutil.pread("xbacklight -get")) end)
 
-    awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play() end),
-    awful.key({ }, "XF86AudioStop", function () mpc:stop() end),
-    awful.key({ }, "XF86AudioNext", function () mpc:next() end),
-    awful.key({ }, "XF86AudioPrev", function () mpc:previous() end)
+    --awful.key({ }, "XF86AudioPlay", function () mpc:toggle_play() end),
+    --awful.key({ }, "XF86AudioStop", function () mpc:stop() end),
+    --awful.key({ }, "XF86AudioNext", function () mpc:next() end),
+    --awful.key({ }, "XF86AudioPrev", function () mpc:previous() end)
 )
 
 local tag_keys = {}
